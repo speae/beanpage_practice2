@@ -1,0 +1,28 @@
+{
+  "name": "beanpage_practice2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/beanpage_practice2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "htmlspecialchars": "^1.0.5",
+    "js-string-escape": "^1.0.1",
+    "mysql2": "^2.2.5",
+    "nl2br": "0.0.3",
+    "session-file-store": "^1.4.0",
+    "uniqid": "^5.2.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
