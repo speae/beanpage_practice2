@@ -1,5 +1,5 @@
 /**
- * / 랜더링 준비 처리
+ * /board 랜더링 준비 처리
  * @param request
  * @param response
  * @param render_data
@@ -10,7 +10,7 @@ module.exports = async function(request, response, render_data, query_list) {
     const COMMON = require('../class/common');
     try{
 
-        render_data.source = "site/index";
+        render_data.source = "board/index";
         throw "SUCCESS";
     }catch (e) {
         if (e === "SUCCESS") {

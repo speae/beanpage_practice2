@@ -20,8 +20,13 @@ module.exports = async function(type, request, response) {
         //GET 일경우 UI 랜더링 처리
         if (type==="get") {
 
-            await require('./site/index')(request, response, render_data, query_list);
 
+
+            if(query_list[0]==='board'){
+                await require('./board/index')(request, response, render_data, query_list);
+            }else{
+                await require('./site/index')(request, response, render_data, query_list);
+            }
 
             //처리도중 얼러트 발생한경우
             if (render_data.alert_msg!=='') render_data.err_msg += `<script>alert('${COMMON.escapeJavascript(render_data.alert_msg)}')</script>`;
