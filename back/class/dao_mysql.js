@@ -285,7 +285,7 @@ DAO_MYSQL.CONN_DATA_TEST = {
     'host': '13.124.105.184',
     'user': 'beanpage',
     'pwd': '#!@cmcm',
-    'db_name': 'beanpage_practice',
+    'db_name': 'beanpage_practice2',
     'port': 32123
 };
 
