@@ -1,6 +1,7 @@
 //const DELAY = require('delay');
 const COMMON = require('./common');
 const MYSQL2 = require('mysql2/promise');
+
 class DAO_MYSQL{
 
     /**
