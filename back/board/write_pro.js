@@ -15,12 +15,14 @@ router.post('board/write_pro.js', function (req, res, next) {
     const insertData = [
         num, subject, writer, write_content, write_date, count+1
     ];
-    db.CONN_DATA_TEST(sql, insertData, function (err, results) {
+    db.CONN_DATA_TEST(sql, insertData, function (err, rows, fields) {
         if(err){
             console.log(err);
             res.redirect('/board/write');
         }
-        console.log("input success "+results.insertId);
+        console.log("input success");
         res.redirect('/board/read');
     });
 })
+
+module.exports = router;

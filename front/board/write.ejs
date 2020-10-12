@@ -10,17 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
     <title>wiki</title>
-    <script>
-        const hostname = '127.0.0.1';
-        // server ip
-        const port = 8081;
-        // connection port
 
-        const http = require('http');
-        http.createServer(require('./back/index')).listen(port, hostname);
-
-        console.log(`listening on http://${hostname}:${port}`);
-    </script>
     <style>
         .top > ul > li {
             float: left;
@@ -63,8 +53,8 @@
                 <li><a href="https://ko.wikipedia.org/wiki/Node.js">node.js개요</a></li>
                 <li><a href="https://ko.wikipedia.org/wiki/%EC%A2%85%EC%86%8D%ED%98%95_%EC%8B%9C%ED%8A%B8">CSS개요</a>
                 </li>
-                <li><a href="board">게시판</a></li>
-                <li><a href="index">홈으로</a></li>
+                <li><a href="/board/read">게시판</a></li>
+                <li><a href="/site">홈으로</a></li>
             </ul>
         </nav>
     </div>
@@ -86,13 +76,11 @@
             <td><input type="text" id="write_content"></td>
         </tr>
         <tr>
-            <td>
-                <button onclick="location.href='board/read'">돌아가기</button>
-            </td>
             <td><input type="submit" value="입력"></td>
         </tr>
     </table>
 </form>
+<button onclick="location.href='/board/read'">돌아가기</button>
 </BODY>
 <footer>
 
