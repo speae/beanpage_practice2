@@ -1,19 +1,26 @@
-var express = require('express');
-var router = express.Router();
-const app = require("../index");
+const express = require('express');
+const router = express.Router();
 const db = require("../class/dao_mysql");
 
-app.post('board/write_pro.js', function (req, res) {
-    var reqBody = req.body;
-    var insertData = [
-        reqBody.num, reqBody.subject, reqBody.writer, reqBody.write_content, reqBody.write_date, reqBody.count+1
+router.post('board/write_pro.js', function (req, res, next) {
+    const reqBody = req.body;
+    const num = reqBody['num'];
+    const subject = reqBody['subject'];
+    const writer = reqBody['writer'];
+    const write_date = reqBody['write_date'];
+    const write_content = reqBody['write_content'];
+    const count = parseInt(reqBody['count']);
+
+    const sql = 'insert into board_table values (?, ?, ?, ?, timestamp, ?)';
+    const insertData = [
+        num, subject, writer, write_content, write_date, count+1
     ];
-    var sql = 'insert into board_table values (?, ?, ?, ?, timestamp, ?)';
     db.CONN_DATA_TEST(sql, insertData, function (err, results) {
         if(err){
             console.log(err);
+            res.redirect('/board/write');
         }
         console.log("input success "+results.insertId);
+        res.redirect('/board/read');
     });
-    res.redirect('/board/read');
 })
