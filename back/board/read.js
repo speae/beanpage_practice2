@@ -10,7 +10,7 @@ module.exports = async function(request, response, render_data, query_list) {
     const COMMON = require('../class/common');
     try{
 
-        render_data.source = "write/write";
+        render_data.source = "board/read";
         throw "SUCCESS";
     }catch (e) {
         if (e === "SUCCESS") {

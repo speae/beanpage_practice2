@@ -21,9 +21,11 @@ module.exports = async function(type, request, response) {
         if (type==="get") {
 
             if(query_list[0]==='board'){
-                await require('./board/index')(request, response, render_data, query_list);
-            }else if(query_list[0]==='write'){
-                await require('./write/write')(request, response, render_data, query_list);
+                if(query_list[1]==='read'){
+                    await require('./board/read')(request, response, render_data, query_list);
+                }else if(query_list[1]==='write'){
+                    await require('./board/write')(request, response, render_data, query_list);
+                }
             }else{
                 await require('./site/index')(request, response, render_data, query_list);
              }
