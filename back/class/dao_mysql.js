@@ -213,7 +213,7 @@ class DAO_MYSQL{
     /**
      * SQL 실행 (결과 레코드가 여러개일경우)
      * @param {String} query
-     * @param {String[]} params
+     * @param {string[]} params
      * @param {boolean} error_slack_alarm 에러발생시 슬랙알람 여부
      * @return {Promise<boolean|Array>}
      */
@@ -284,8 +284,8 @@ module.exports = DAO_MYSQL;
 //테스트 디비 접속 정보 (리얼 IP)
 DAO_MYSQL.CONN_DATA_TEST = {
     'host': '13.124.105.184',
-    'user': 'beanpage',
-    'pwd': '#!@cmcm',
+    'user': 'speae',
+    'pwd': 'beanpage',
     'db_name': 'beanpage_practice2',
     'port': 32123
 };

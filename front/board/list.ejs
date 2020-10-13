@@ -3,7 +3,7 @@
 <HEAD>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>미니 프로젝트</title>
+    <title><%= title %></title>
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -60,60 +60,33 @@
     </div>
 </HEAD>
 <BODY>
-<%
-var sysdate = new Date();
-function date_to_str(format) {
-    var year = format.getFullYear();
-    var month = format.getMonth() + 1;
-    var date = format.getMonth();
-    var hour = format.getHours();
-    var min = format.getMinutes();
-    var sec = format.getSeconds();
-
-    if (month < 10) {
-        month = '0' + month;
+<table>
+    <tr>
+        <td>번호</td>
+        <td>제목</td>
+        <td>글쓴이</td>
+        <td>내용</td>
+        <td>작성일</td>
+        <td>조회수</td>
+    </tr>
+    <%
+    for(var i = 0; i < rows.length; i++){
+        var data = rows[i];
+    %>
+    <tr>
+        <td><%= data.num%></td>
+        <td><%= data.subject%></td>
+        <td><%= data.writer%></td>
+        <td><%= data.write_content%></td>
+        <td><%= data.write_date%></td>
+        <td><%= data.count %></td>
+    </tr>
+    <%
     }
-
-    if (date < 10) {
-        date = '0' + date;
-    }
-    if (hour < 10) {
-        hour = '0' + hour;
-    }
-    if (min < 10) {
-        min = '0' + min;
-    }
-    if (sec < 10) {
-        sec = '0' + sec;
-    }
-    return year + "-" + month + "-" + date + "-" + hour + "-" + min + "-" + sec;
-}
-sysdate = date_to_str(sysdate);
-%>
-<form method="post" action="/board/write">
-    <table>
-
-        <tr>
-            <td>제목</td>
-            <td>글쓴이</td>
-            <td>내용</td>
-
-        </tr>
-        <tr>
-            <td><input type="text" name="subject"></td>
-            <td><input type="text" name="writer"></td>
-            <td><input type="text" name="write_content"></td>
-            <input type="hidden" name="num" value="<%= currentNum %>">
-            <input type="hidden" name="write_date" value="<%= sysdate %>">
-        </tr>
-        <tr>
-            <td><input type="submit" value="입력"></td>
-        </tr>
-    </table>
-</form>
-<button onclick="location.href='/board/list'">돌아가기</button>
+ %>
+</table>
+<button onclick="location.href='/board/write'">글쓰기</button>
 </BODY>
 <footer>
-
 </footer>
 </html>

@@ -1,3 +1,4 @@
+
 process.env.TZ = "Asia/Seoul";
 
 /**
@@ -10,6 +11,7 @@ process.env.TZ = "Asia/Seoul";
 module.exports = async function(type, request, response) {
     const COMMON = require("./class/common");
     const DAO_MYSQL = require("./class/dao_mysql");
+
     //렌더 데이터 생성
     let render_data = {err_msg:'', m:'', m2:'', m3:'', COMMON: COMMON, site_data:{}, js_command_list:[], site_url:'', source:'', is_template_site:'N', alert_msg:'', redirect_url:'', meta_tag_list : []};
     try{
@@ -21,8 +23,9 @@ module.exports = async function(type, request, response) {
         if (type==="get") {
 
             if(query_list[0]==='board'){
-                if(query_list[1]==='read'){
-                    await require('./board/read')(request, response, render_data, query_list);
+                if(query_list[1]==='list'){
+
+                    await require('./board/list')(request, response, render_data, query_list);
                 }else if(query_list[1]==='write'){
                     await require('./board/write')(request, response, render_data, query_list);
                 }
@@ -43,13 +46,42 @@ module.exports = async function(type, request, response) {
             if (render_data.source !== "") {
                 response.render(render_data.source, render_data);
             }
-            //POST 일경우 내부 처리후 json 랜더링
+
+            //POST 일경우 내부 처리후 json 렌더링
         }else if (type==="post"){
-            let result = {};
-            let render_data = {};
+            const reqBody = request.body;
+            const num = reqBody['num'];
+            const subject = reqBody['subject'];
+            const writer = reqBody['writer'];
+            const write_content = reqBody['write_content'];
+            const write_date = reqBody['write_date'];
+            const count = 0;
 
-            switch(query_list[0].trim()) {
+            const insertData = [num, subject, writer, write_content, write_date, count];
 
+            let result = {insertData};
+            let render_data = {err_msg:'', m:'', m2:'', m3:'', COMMON: COMMON, site_data:{}, js_command_list:[], site_url:'', source:'', is_template_site:'N', alert_msg:'', redirect_url:'', meta_tag_list : []};
+            if(query_list[0]==='board') {
+
+                switch (query_list[1].trim()) {
+
+
+                    case "write":
+                        //db 인스턴스 생성
+                        const db = new DAO_MYSQL();
+
+                        db.setTable('board_table');
+                        db.add('num', num+1);
+                        db.add('subject', subject);
+                        db.add('writer', writer);
+                        db.add('write_content', write_content);
+                        db.add('write_date', write_date);
+                        db.add('count', count);
+
+                        await db.insert();
+
+                        return result;
+                }
             }
             response.json(result);
         }
