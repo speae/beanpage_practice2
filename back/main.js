@@ -43,8 +43,11 @@ module.exports = async function (type, request, response) {
 
                 } else if (query_list[1] === 'write') {
 
-
                     await require('./board/write')(request, response, render_data, query_list);
+
+                }else if (query_list[1] === 'read') {
+
+                    await require('./board/read')(request, response, render_data, query_list);
 
                 }
             } else {
@@ -75,9 +78,7 @@ module.exports = async function (type, request, response) {
             const count = 0;
 
             if (query_list[0] === 'board') {
-                switch (query_list[1].trim()) {
-
-                    case "write":
+                if (query_list[1].trim()==='write') {
 
                         //db 인스턴스 생성
                         const db = new DAO_MYSQL();
@@ -89,10 +90,9 @@ module.exports = async function (type, request, response) {
                         db.add('count', count);
 
                         if(await db.insert()===false) {
-                            throw "게시글 작성 실패";
+                            throw "게시글 작성 실패.";
                         }
                         response.redirect('/board/list');
-                        break;
                 }
                 //response.json(result);
             }

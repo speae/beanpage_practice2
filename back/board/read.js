@@ -1,27 +1,22 @@
-/**
- * /board/read 랜더링 준비 처리
- * @param request
- * @param response
- * @param render_data
- * @param {[]} query_list
- * @return {Promise<boolean>}
- */
 
 module.exports = async function(request, response, render_data, query_list) {
     const COMMON = require('../class/common');
     const DAO_MYSQL = require('../class/dao_mysql');
     const db = new DAO_MYSQL();
 
-    const sql="select * from board_table order by num desc";
 
-    const resultData = await db.query(sql, []);
-    if(resultData===false){
-        throw "게시글 불러오기 실패.";
+    const reqBody = request.body;
+    const num = reqBody['num'];
+    const sql="select * from board_table where num="+num;
+
+    const selectData = await db.query(sql, []);
+    if(selectData===false){
+        throw "개인 게시글 불러오기 실패.";
     }
     try{
         render_data.title = "게시판";
         render_data.source = "board/list";
-        render_data.rows = resultData;
+        render_data.rows = selectData;
         throw "SUCCESS";
     }catch (e) {
         if (e === "SUCCESS") {
@@ -32,4 +27,3 @@ module.exports = async function(request, response, render_data, query_list) {
         }
     }
 };
-
