@@ -210,18 +210,6 @@ class DAO_MYSQL{
         return true;
     }
 
-    async queryOnlyOne(query, error_slack_alarm=true){
-        let conn=false;
-        try {
-            conn = await this.connect();
-            if (conn===false) return false;
-            /* Step 3. */
-            const [rows] = await conn.query(query);
-            return rows;
-        } catch(err) {
-            return false;
-        }
-    }
 
     /**
      * SQL 실행 (결과 레코드가 여러개일경우)
