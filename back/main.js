@@ -13,7 +13,7 @@ module.exports = async function(type, request, response) {
     const DAO_MYSQL = require("./class/dao_mysql");
 
     //렌더 데이터 생성
-    let render_data = {err_msg:'', m:'', m2:'', m3:'', COMMON: COMMON, site_data:{}, js_command_list:[], site_url:'', source:'', is_template_site:'N', alert_msg:'', redirect_url:'', meta_tag_list : []};
+    let render_data = {err_msg:'', m:'', m2:'', m3:'', COMMON: COMMON, site_data:{}, js_command_list:[], site_url:'', source:'', is_template_site:'N', alert_msg:'', redirect_url:'', meta_tag_list : [], rows: []};
     try{
 
         //요청이 들어온 쿼리 리스트 구하기
@@ -24,10 +24,32 @@ module.exports = async function(type, request, response) {
 
             if(query_list[0]==='board'){
                 if(query_list[1]==='list'){
+                    // const insertData = ["num", "subject", "writer", "write_content", "write_date", "count"];
+                    //
+                    // const DAO_MYSQL = require('./class/dao_mysql');
+                    // const db = new DAO_MYSQL();
+                    //
+                    // const sql="select * from board_table";
+                    // const resultData = await db.query(sql, insertData);
+                    //
+                    // const rows = function (rows=resultData) {
+                    //     for(i<0; i<rows.length; i++){
+                    //         console.rows[i].name;
+                    //     }
+                    //     return rows;
+                    // }
+   await require('./board/list')(request, response, render_data, query_list);
 
-                    await require('./board/list')(request, response, render_data, query_list);
                 }else if(query_list[1]==='write'){
+
+                    const DAO_MYSQL = require('./class/dao_mysql');
+                    const db = new DAO_MYSQL();
+                    db.setTable('board_table');
+                    const sql="select max(num) from board_table";
+                    const num = db.queryOnlyOne(sql);
+
                     await require('./board/write')(request, response, render_data, query_list);
+
                 }
             }else{
                 await require('./site/index')(request, response, render_data, query_list);
@@ -82,8 +104,10 @@ module.exports = async function(type, request, response) {
 
                         return result;
                 }
+                response.json(result);
+                response.render('/board/write_pro', {'writer': writer});
             }
-            response.json(result);
+
         }
     }catch(e){
         /* 에러 발생시 처리 */

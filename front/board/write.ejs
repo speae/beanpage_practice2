@@ -61,6 +61,8 @@
 </HEAD>
 <BODY>
 <%
+
+
 var sysdate = new Date();
 function date_to_str(format) {
     var year = format.getFullYear();
@@ -97,13 +99,13 @@ sysdate = date_to_str(sysdate);
             <td>제목</td>
             <td>글쓴이</td>
             <td>내용</td>
-
+<%=num%>
         </tr>
         <tr>
             <td><input type="text" name="subject"></td>
             <td><input type="text" name="writer"></td>
             <td><input type="text" name="write_content"></td>
-            <input type="hidden" name="num" value="<%= currentNum %>">
+            <input type="hidden" name="num" value="<%= num %>">
             <input type="hidden" name="write_date" value="<%= sysdate %>">
         </tr>
         <tr>
