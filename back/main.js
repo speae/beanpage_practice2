@@ -68,54 +68,33 @@ module.exports = async function (type, request, response) {
             //POST 일경우 내부 처리후 json 렌더링
         } else if (type === "post") {
             const reqBody = request.body;
-            const num = reqBody['num'];
+
             const subject = reqBody['subject'];
             const writer = reqBody['writer'];
             const write_content = reqBody['write_content'];
-            const write_date = reqBody['write_date'];
             const count = 0;
 
-            const insertData = [num, subject, writer, write_content, write_date, count];
-
-            let result = {insertData};
-            let render_data = {
-                err_msg: '',
-                m: '',
-                m2: '',
-                m3: '',
-                COMMON: COMMON,
-                site_data: {},
-                js_command_list: [],
-                site_url: '',
-                source: '',
-                is_template_site: 'N',
-                alert_msg: '',
-                redirect_url: '',
-                meta_tag_list: []
-            };
             if (query_list[0] === 'board') {
-
                 switch (query_list[1].trim()) {
 
-
                     case "write":
+
                         //db 인스턴스 생성
                         const db = new DAO_MYSQL();
 
                         db.setTable('board_table');
-                        db.add('num', num + 1);
                         db.add('subject', subject);
                         db.add('writer', writer);
                         db.add('write_content', write_content);
-                        db.add('write_date', write_date);
                         db.add('count', count);
 
-                        await db.insert();
-
-                        return result;
+                        if(await db.insert()===false) {
+                            throw "게시글 작성 실패";
+                        }
+                        response.redirect('/board/list');
+                        break;
                 }
-                response.json(result);
-                response.render('/board/write_pro', {'writer': writer});
+                //response.json(result);
             }
 
         }

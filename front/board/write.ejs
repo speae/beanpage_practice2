@@ -3,15 +3,14 @@
 <HEAD>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>미니 프로젝트</title>
+    <title><%=title%></title>
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <title>wiki</title>
 
-    <style>
+     <style>
         .top > ul > li {
             float: left;
             margin-left: 100px;
@@ -47,51 +46,14 @@
         게시판
         <nav class="top">
             <ul class="start">
-                <li>
-                    <a href="https://ko.wikipedia.org/wiki/%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8">JS개요</a>
-                </li>
-                <li><a href="https://ko.wikipedia.org/wiki/Node.js">node.js개요</a></li>
-                <li><a href="https://ko.wikipedia.org/wiki/%EC%A2%85%EC%86%8D%ED%98%95_%EC%8B%9C%ED%8A%B8">CSS개요</a>
-                </li>
-                <li><a href="/board/list">게시판</a></li>
+                 <li><a href="/board/list">게시판</a></li>
                 <li><a href="/site">홈으로</a></li>
             </ul>
         </nav>
     </div>
 </HEAD>
 <BODY>
-<%
 
-
-var sysdate = new Date();
-function date_to_str(format) {
-    var year = format.getFullYear();
-    var month = format.getMonth() + 1;
-    var date = format.getMonth();
-    var hour = format.getHours();
-    var min = format.getMinutes();
-    var sec = format.getSeconds();
-
-    if (month < 10) {
-        month = '0' + month;
-    }
-
-    if (date < 10) {
-        date = '0' + date;
-    }
-    if (hour < 10) {
-        hour = '0' + hour;
-    }
-    if (min < 10) {
-        min = '0' + min;
-    }
-    if (sec < 10) {
-        sec = '0' + sec;
-    }
-    return year + "-" + month + "-" + date + "-" + hour + "-" + min + "-" + sec;
-}
-sysdate = date_to_str(sysdate);
-%>
 <form method="post" action="/board/write">
     <table>
 
@@ -99,14 +61,12 @@ sysdate = date_to_str(sysdate);
             <td>제목</td>
             <td>글쓴이</td>
             <td>내용</td>
-<%=num%>
+
         </tr>
         <tr>
             <td><input type="text" name="subject"></td>
             <td><input type="text" name="writer"></td>
             <td><input type="text" name="write_content"></td>
-            <input type="hidden" name="num" value="<%= num %>">
-            <input type="hidden" name="write_date" value="<%= sysdate %>">
         </tr>
         <tr>
             <td><input type="submit" value="입력"></td>
