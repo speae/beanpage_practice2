@@ -54,8 +54,7 @@
 </HEAD>
 <BODY>
 <%
-for(var i = 0; i < rows.length; i++){
-    var data = rows[i];
+  var data = rows;
 %>
 <form method="post" action="/board/write">
     <table>
@@ -63,23 +62,26 @@ for(var i = 0; i < rows.length; i++){
             <td>번호</td><td><input type="text" name="num"><%=data.num%></td>
         </tr>
         <tr>
+            <td>작성일</td><td><input type="text" name="write_date"><%=data.write_date%></td>
+        </tr>
+        <tr>
+            <td>조회수</td><td><input type="text" name="count"><%=data.count%></td>
+        </tr>
+        <tr>
             <script src="back/board/read"></script>
             <td>제목</td><td><input type="text" name="subject"><%=data.subject%></td>
         </tr>
         <tr>
-            <td>글쓴이</td><td><input type="text" name="writer"></td>
+            <td>글쓴이</td><td><input type="text" name="writer"><%=data.writer%></td>
         </tr>
         <tr>
-            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"></textarea></td>
+            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"><%=data.write_content%></textarea></td>
         </tr>
         <tr>
             <td><input type="submit" value="입력"></td>
         </tr>
     </table>
 </form>
-<%
-}
- %>
 <button onclick="location.href='/board/list'">돌아가기</button>
 </BODY>
 <footer>
