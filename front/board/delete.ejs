@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html>
+<HEAD>
+    <meta charset="UTF-8">
+</HEAD>
+<body>
+<script>
+    const check = confirm('삭제하시겠습니까?')
+    if(check===true){
+        alert('삭제되었습니다.')
+        location.href="/board/list";
+    }else{
+        alert('취소하였습니다.')
+        location.href="/board/read";
+    }
+</script>
+</body>
+</html>
