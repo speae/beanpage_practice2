@@ -22,9 +22,9 @@ module.exports = async function(request, response, render_data, query_list) {
         render_data.title = "게시판";
         render_data.source = "board/list";
         render_data.rows = resultData;
-        throw console.log("게시글 불러오기.");
+        throw "SUCCESS";
     }catch (e) {
-        if (e === console.log("SUCCESS")) {
+        if (e === "SUCCESS") {
             return true;
         } else {
             render_data.err_msg = e;

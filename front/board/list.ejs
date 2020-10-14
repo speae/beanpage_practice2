@@ -65,16 +65,16 @@
     </tr>
     <%
     for(var i = 0; i < rows.length; i++){
-        var data = rows[i];
-        var num = data.num;
+        var board_data = rows[i];
+        var num = board_data.num;
     %>
     <tr>
-        <td><%= data.num%></td>
-        <td><a href="/board/read?num=<%=num%>"><%= data.subject%></a></td>
-        <td><%= data.writer%></td>
-        <td><%= data.write_content%></td>
-        <td><%= data.write_date%></td>
-        <td><%= data.count %></td>
+        <td><%= board_data.num%></td>
+        <td><a href="/board/read?num=<%=num%>"><%= board_data.subject%></a></td>
+        <td><%= board_data.writer%></td>
+        <td><%= board_data.write_content%></td>
+        <td><%= board_data.write_date%></td>
+        <td><%= board_data.count %></td>
      </tr>
     <%
     }

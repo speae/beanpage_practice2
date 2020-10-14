@@ -53,7 +53,9 @@
     </div>
 </HEAD>
 <BODY>
-<table>
+
+<form method="post" action="/board/update">
+    <table>
         <tr>
             <td>번호</td><td><input type="text" name="num" value="<%=rows.num%>" readonly></td>
         </tr>
@@ -64,19 +66,24 @@
             <td>조회수</td><td><input type="text" name="count" value="<%=rows.count%>" readonly></td>
         </tr>
         <tr>
-            <td>제목</td><td><input type="text" name="subject" value="<%=rows.subject%>" readonly></td>
+            <td>제목</td><td><input type="text" name="subject" value="<%=rows.subject%>"></td>
         </tr>
         <tr>
-            <td>글쓴이</td><td><input type="text" name="writer" value="<%=rows.writer%>" readonly></td>
+            <td>글쓴이</td><td><input type="text" name="writer" value="<%=rows.writer%>"></td>
         </tr>
         <tr>
-            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"  readonly><%=rows.write_content%></textarea></td>
+            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"><%=rows.write_content%></textarea></td>
         </tr>
         <tr>
-            <td><button onclick="location.href='/board/update?num=<%=rows.num%>'">수정</button></td>
+            <input type="hidden" name="num" value="<%=rows.num%>">
+            <input type="hidden" name="subject" value="<%=rows.subject%>">
+            <input type="hidden" name="writer" value="<%=rows.writer%>">
+            <input type="hidden" name="write_content" value="<%=rows.write_content%>">
+
+            <td><input type="submit" value="수정"></td>
         </tr>
     </table>
-
+</form>
 <button onclick="location.href='/board/list'">돌아가기</button>
 </BODY>
 <footer>

@@ -48,6 +48,10 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/read')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'update') {
+
+                    await require('./board/update')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -76,11 +80,11 @@ module.exports = async function (type, request, response) {
             const write_content = reqBody['write_content'];
             const count = 0;
 
+            //db 인스턴스 생성
+            const db = new DAO_MYSQL();
+
             if (query_list[0] === 'board') {
                 if (query_list[1].trim() === 'write') {
-
-                    //db 인스턴스 생성
-                    const db = new DAO_MYSQL();
 
                     db.setTable('board_table');
                     db.add('subject', subject);
@@ -92,8 +96,20 @@ module.exports = async function (type, request, response) {
                         throw "게시글 작성 실패.";
                     }
                     response.redirect('/board/list');
+                }else if (query_list[1].trim() === 'update') {
+
+                    const num = request.query.num;
+                    
+                    db.setTable('board_table');
+                    db.add('subject', subject);
+                    db.add('writer', writer);
+                    db.add('write_content', write_content);
+
+                    if (await db.update('num=?', [num]) === false) {
+                        throw "수정 실패.";
+                    }
+                    response.redirect('/board/list');
                 }
-                //response.json(result);
             }
 
         }
