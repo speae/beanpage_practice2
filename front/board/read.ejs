@@ -53,28 +53,26 @@
     </div>
 </HEAD>
 <BODY>
-<%
-  var data = rows;
-%>
+
 <form method="post" action="/board/update">
     <table>
         <tr>
-            <td>번호</td><td><input type="text" name="num"><%=data.num%></td>
+            <td>번호</td><td><input type="text" name="num" value="<%=rows.num%>" readonly></td>
         </tr>
         <tr>
-            <td>작성일</td><td><input type="text" name="write_date"><%=data.write_date%></td>
+            <td>작성일</td><td><input type="text" name="write_date" placeholder="<%=rows.write_date%>" readonly></td>
         </tr>
         <tr>
-            <td>조회수</td><td><input type="text" name="count"><%=data.count%></td>
+            <td>조회수</td><td><input type="text" name="count" value="<%=rows.count%>"></td>
         </tr>
         <tr>
-            <td>제목</td><td><input type="text" name="subject"><%=data.subject%></td>
+            <td>제목</td><td><input type="text" name="subject" value="<%=rows.subject%>"></td>
         </tr>
         <tr>
-            <td>글쓴이</td><td><input type="text" name="writer"><%=data.writer%></td>
+            <td>글쓴이</td><td><input type="text" name="writer" value="<%=rows.writer%>"></td>
         </tr>
         <tr>
-            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"><%=data.write_content%></textarea></td>
+            <td>내용</td><td><textarea cols="23" rows="15" name="write_content" ><%=rows.write_content%></textarea></td>
         </tr>
         <tr>
             <td><input type="submit" value="수정"></td>
