@@ -34,8 +34,9 @@ module.exports = async function (request, response, render_data, query_list) {
 
         db.setTable('board_table');
         db.add('count', upCount);
+        db.add('num', num);
 
-        if (await db.update(num, [upCount.toString()]) === false) {
+        if (await db.update('num=?', [num]) === false) {
             throw "조회 실패.";
         }
 
