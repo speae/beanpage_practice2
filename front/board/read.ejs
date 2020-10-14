@@ -3,7 +3,7 @@
 <HEAD>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= title %></title>
+    <title><%=title%></title>
     <!-- Bootstrap CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -40,48 +40,49 @@
         td {
             width: 200px;
             height: 50px;
-            text-align: center;
         }
     </style>
     <div class="title">
         게시판
         <nav class="top">
             <ul class="start">
-                 <li><a href="/board/list">게시판</a></li>
+                <li><a href="/board/list">게시판</a></li>
                 <li><a href="/site">홈으로</a></li>
             </ul>
         </nav>
     </div>
 </HEAD>
 <BODY>
-<table>
-    <tr>
-        <td>번호</td>
-        <td>제목</td>
-        <td>글쓴이</td>
-        <td>내용</td>
-        <td>작성일</td>
-        <td>조회수</td>
-    </tr>
-    <%
-    for(var i = 0; i < rows.length; i++){
-        var data = rows[i];
-        var num = data.num;
-    %>
-    <tr>
-        <td><%= data.num%></td>
-        <td><a href="/board/read?num=<%=num%>"><%= data.subject%></a></td>
-        <td><%= data.writer%></td>
-        <td><%= data.write_content%></td>
-        <td><%= data.write_date%></td>
-        <td><%= data.count %></td>
-     </tr>
-    <%
-    }
+<%
+for(var i = 0; i < rows.length; i++){
+    var data = rows[i];
+%>
+<form method="post" action="/board/write">
+    <table>
+        <tr>
+            <td>번호</td><td><input type="text" name="num"><%=data.num%></td>
+        </tr>
+        <tr>
+            <script src="back/board/read"></script>
+            <td>제목</td><td><input type="text" name="subject"><%=data.subject%></td>
+        </tr>
+        <tr>
+            <td>글쓴이</td><td><input type="text" name="writer"></td>
+        </tr>
+        <tr>
+            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"></textarea></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="입력"></td>
+        </tr>
+    </table>
+</form>
+<%
+}
  %>
-</table>
-<button onclick="location.href='/board/write'">글쓰기</button>
+<button onclick="location.href='/board/list'">돌아가기</button>
 </BODY>
 <footer>
+
 </footer>
 </html>

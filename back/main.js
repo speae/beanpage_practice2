@@ -26,8 +26,8 @@ module.exports = async function (type, request, response) {
         alert_msg: '',
         redirect_url: '',
         meta_tag_list: [],
-        rows: []
-    };
+     };
+
     try {
 
         //요청이 들어온 쿼리 리스트 구하기
@@ -35,8 +35,7 @@ module.exports = async function (type, request, response) {
 
         //GET 일경우 UI 랜더링 처리
         if (type === "get") {
-
-            if (query_list[0] === 'board') {
+           if (query_list[0] === 'board') {
                 if (query_list[1] === 'list') {
 
                     await require('./board/list')(request, response, render_data, query_list);
@@ -45,7 +44,7 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/write')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'read') {
+                } else if (query_list[1] === 'read') {
 
                     await require('./board/read')(request, response, render_data, query_list);
 
@@ -78,21 +77,21 @@ module.exports = async function (type, request, response) {
             const count = 0;
 
             if (query_list[0] === 'board') {
-                if (query_list[1].trim()==='write') {
+                if (query_list[1].trim() === 'write') {
 
-                        //db 인스턴스 생성
-                        const db = new DAO_MYSQL();
+                    //db 인스턴스 생성
+                    const db = new DAO_MYSQL();
 
-                        db.setTable('board_table');
-                        db.add('subject', subject);
-                        db.add('writer', writer);
-                        db.add('write_content', write_content);
-                        db.add('count', count);
+                    db.setTable('board_table');
+                    db.add('subject', subject);
+                    db.add('writer', writer);
+                    db.add('write_content', write_content);
+                    db.add('count', count);
 
-                        if(await db.insert()===false) {
-                            throw "게시글 작성 실패.";
-                        }
-                        response.redirect('/board/list');
+                    if (await db.insert() === false) {
+                        throw "게시글 작성 실패.";
+                    }
+                    response.redirect('/board/list');
                 }
                 //response.json(result);
             }

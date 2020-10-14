@@ -1,6 +1,7 @@
 //공용 클래스 (static 함수만 사용)
 class COMMON{
 
+
     /**
      * req 요청을 이용해서 query list 리턴
      * @param req

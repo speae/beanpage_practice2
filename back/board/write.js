@@ -13,9 +13,9 @@ module.exports = async function(request, response, render_data, query_list) {
 
         render_data.title = "게시판";
         render_data.source = "board/write";
-        throw "SUCCESS";
+        throw console.log("게시글 쓰기.");
     }catch (e) {
-        if (e === "SUCCESS") {
+        if (e === console.log("SUCCESS")) {
             return true;
         } else {
             render_data.err_msg = e;

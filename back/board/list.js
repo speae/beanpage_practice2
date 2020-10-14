@@ -12,7 +12,7 @@ module.exports = async function(request, response, render_data, query_list) {
     const DAO_MYSQL = require('../class/dao_mysql');
     const db = new DAO_MYSQL();
 
-    const sql="select * from board_table order by num desc";
+    const sql="SELECT * FROM board_table ORDER BY num DESC";
 
     const resultData = await db.query(sql, []);
     if(resultData===false){
@@ -22,9 +22,9 @@ module.exports = async function(request, response, render_data, query_list) {
         render_data.title = "게시판";
         render_data.source = "board/list";
         render_data.rows = resultData;
-        throw "SUCCESS";
+        throw console.log("게시글 불러오기.");
     }catch (e) {
-        if (e === "SUCCESS") {
+        if (e === console.log("SUCCESS")) {
             return true;
         } else {
             render_data.err_msg = e;
