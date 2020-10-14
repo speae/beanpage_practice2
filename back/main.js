@@ -98,7 +98,7 @@ module.exports = async function (type, request, response) {
                     response.redirect('/board/list');
                 }else if (query_list[1].trim() === 'update') {
 
-                    const num = request.query.num;
+                    const num = request.body.num;
                     
                     db.setTable('board_table');
                     db.add('subject', subject);
