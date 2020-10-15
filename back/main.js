@@ -121,11 +121,10 @@ module.exports = async function (type, request, response) {
 
                         if (await db.delete('num=?', [num]) === false) {
                             throw "삭제 실패.";
-                            response.redirect('/board/delete?num=');
                         }
-                    } else {
-                        throw alert('잘못 입력하셨습니다. 다시 입력해주세요.');
                         response.redirect('/board/list');
+                    } else {
+                        throw "삭제 취소";
 
                     }
                 }
@@ -139,7 +138,7 @@ module.exports = async function (type, request, response) {
 
         } else if (type === 'post') {	//POST 일땐 msg 에 에러메세지 리턴
             response.json({
-                msg: `alert('${COMMON.escapeJavascript("잘못 입력하셨습니다. 다시 입력해주세요.")}')`
+                msg: e
             });
         }
     }
