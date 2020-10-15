@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
 </HEAD>
 <body>
+<form method="post" action="/board/delete">
+    <tr>
+    <td><input type="text" name="deleteNOW" placeholder="삭제를 원하신다면 '지금삭제'를 입력하세요."></td>
+    <td><input type="submit" value="확인"></td>
+    </tr>
+    <input type="hidden" name="num" value="<%=rows.num%>">
+</form>
 <script>
-    const check = confirm('삭제하시겠습니까?')
-    if(check===true){
-        alert('삭제되었습니다.')
-        location.href="/board/list";
-    }else{
-        alert('취소하였습니다.')
-        location.href="/board/read";
-    }
+
 </script>
 </body>
 </html>

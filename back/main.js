@@ -52,6 +52,10 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/update')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'delete') {
+
+               await require('./board/delete')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -109,6 +113,23 @@ module.exports = async function (type, request, response) {
                         throw "수정 실패.";
                     }
                     response.redirect('/board/list');
+                }else if(query_list[1].trim() === 'delete'){
+
+                    if(request.body.deleteNOW==="지금삭제"){
+                    const num = request.body.num;
+
+                    db.setTable('board_table');
+                    db.add('subject', subject);
+                    db.add('writer', writer);
+                    db.add('write_content', write_content);
+
+                    if (await db.delete('num=?', [num]) === false) {
+                        throw "수정 실패.";
+                    }else{
+                        response.render(alert('잘못 입력하셨습니다. 다시 입력해주세요.'));
+                        response.redirect('/board/read?num='+num);
+                    }
+                    }
                 }
             }
 

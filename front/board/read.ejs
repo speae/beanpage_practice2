@@ -53,6 +53,17 @@
     </div>
 </HEAD>
 <BODY>
+<script>
+   function check() {
+       const question = confirm('삭제하시겠습니까?');
+       if(question === true){
+           location.href="/board/delete?num=<%=rows.num%>";
+       }else{
+           alert('취소하였습니다.')
+           location.href="/board/read?num=<%=rows.num%>";
+       }
+   }
+</script>
 <table>
         <tr>
             <td>번호</td><td><input type="text" name="num" value="<%=rows.num%>" readonly></td>
@@ -74,7 +85,7 @@
         </tr>
         <tr>
             <td><button onclick="location.href='/board/update?num=<%=rows.num%>'">수정</button></td>
-            <td><button onclick="location.href='/board/delete?num=<%=rows.num%>'">삭제</button></td>
+            <td><button onclick="check()">삭제</button></td>
         </tr>
     </table>
 
