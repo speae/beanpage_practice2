@@ -100,10 +100,10 @@ module.exports = async function (type, request, response) {
                         throw "게시글 작성 실패.";
                     }
                     response.redirect('/board/list');
-                }else if (query_list[1].trim() === 'update') {
+                } else if (query_list[1].trim() === 'update') {
 
                     const num = request.body.num;
-                    
+
                     db.setTable('board_table');
                     db.add('subject', subject);
                     db.add('writer', writer);
@@ -113,26 +113,23 @@ module.exports = async function (type, request, response) {
                         throw "수정 실패.";
                     }
                     response.redirect('/board/list');
-                }else if(query_list[1].trim() === 'delete'){
+                } else if (query_list[1].trim() === 'delete') {
 
-                    if(request.body.deleteNOW==="지금삭제"){
-                    const num = request.body.num;
+                    if (request.body.deleteNOW === "지금삭제") {
+                        const num = request.body.num;
+                        db.setTable('board_table');
 
-                    db.setTable('board_table');
-                    db.add('subject', subject);
-                    db.add('writer', writer);
-                    db.add('write_content', write_content);
+                        if (await db.delete('num=?', [num]) === false) {
+                            throw "삭제 실패.";
+                            response.redirect('/board/delete?num=');
+                        }
+                    } else {
+                        throw alert('잘못 입력하셨습니다. 다시 입력해주세요.');
+                        response.redirect('/board/list');
 
-                    if (await db.delete('num=?', [num]) === false) {
-                        throw "수정 실패.";
-                    }else{
-                        response.render(alert('잘못 입력하셨습니다. 다시 입력해주세요.'));
-                        response.redirect('/board/read?num='+num);
-                    }
                     }
                 }
             }
-
         }
     } catch (e) {
         /* 에러 발생시 처리 */
@@ -142,7 +139,7 @@ module.exports = async function (type, request, response) {
 
         } else if (type === 'post') {	//POST 일땐 msg 에 에러메세지 리턴
             response.json({
-                msg: e
+                msg: `alert('${COMMON.escapeJavascript("잘못 입력하셨습니다. 다시 입력해주세요.")}')`
             });
         }
     }
