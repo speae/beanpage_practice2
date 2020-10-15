@@ -21,14 +21,14 @@ module.exports = async function(request, response, render_data, query_list) {
         const sql = "SELECT * FROM board_table WHERE num=?";
         const viewData = await db.queryOne(sql, [num]);
 
-        if (viewData === false) {
-            throw "개인 게시글 불러오기 실패.";
-        }
+            if (viewData === false) {
+                throw "개인 게시글 불러오기 실패.";
+            }
 
-        render_data.title = "게시판";
-        render_data.source = "board/delete";
-        render_data.rows = viewData;
-        throw "SUCCESS";
+            render_data.title = "게시판";
+            render_data.source = "board/delete";
+            render_data.rows = viewData;
+            throw "SUCCESS";
     }catch (e) {
         if (e === "SUCCESS") {
             return true;

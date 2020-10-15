@@ -56,6 +56,10 @@ module.exports = async function (type, request, response) {
 
                await require('./board/delete')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'repleWrite') {
+
+                    await require('./board/repleWrite')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -127,6 +131,21 @@ module.exports = async function (type, request, response) {
                         throw "삭제 취소";
 
                     }
+                } else if (query_list[1].trim() === 'repleWrite') {
+                    const reqBody = request.body;
+
+                    const reple_writer = reqBody['reple_writer'];
+                    const reple_content = reqBody['reple_content'];
+                    const num = reqBody['num'];
+
+                    db.setTable('reple');
+                    db.add('num', num);
+                    db.add('reple_writer', reple_writer);
+                    db.add('reple_content', reple_content);
+                    if (await db.insert() === false) {
+                        throw "등록 실패.";
+                    }
+                    response.redirect('/board/read?num='+num);
                 }
             }
         }
