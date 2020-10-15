@@ -64,15 +64,6 @@
            location.href="/board/read?num=<%=rows.num%>";
        }
    }
-     function reple_check() {
-         const question = confirm('삭제하시겠습니까?');
-         if(question === true){
-             location.href="/board/repleDelete?reple_num=<%=reple.reple_num%>";
-         }else{
-             alert('취소하였습니다.')
-             location.href="/board/read?num=<%=rows.num%>";
-         }
-     }
 </script>
 <table border="1" width=800">
         <tr>
@@ -100,7 +91,6 @@
             </td>
         </tr>
     </table>
-<form action="/board/repleWrite" method="post">
 <table border="1" width=800">
     <tr>
         <td colspan="4" align="center">댓글</td>
@@ -110,27 +100,32 @@
         var reple_data = reple[i];
  %>
     <tr>
-        <td colspan="2" align="center"><%=reple_data.reple_writer%></td>\
+        <td colspan="2" align="center"><%=reple_data.reple_writer%></td>
         <td colspan="2" align="center"><%=reple_data.reple_date%></td>
     </tr>
     <tr>
-        <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reple_data.reple_content%></td>
+        <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reple_data.reple_content%><br>
+            <button onclick="location.href='/board/update?num=<%=rows.num%>'">수정</button>
+            <button onclick="location.href='/board/repleDelete?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">삭제</button>
+        </td>
     </tr>
  <%
  }
  %>
+</table>
+<form action="/board/repleWrite" method="post">
+    <table border="1" width=800">
     <tr>
         <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reple_writer" value="<%=reple.reple_writer%>"></td>
     </tr>
     <tr>
-        <td>내용</td><td colspan="3"><input size="70" type="text" name="reple_content" value="<%=reple.reple_content%>"></td>
+        <td>내용</td>
+        <td colspan="3"><input size="70" type="text" name="reple_content" value="<%=reple.reple_content%>"></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
             <input type="hidden" name="num" value="<%=rows.num%>" />
             <input type="submit" value="등록" />
-            <button onclick="location.href='/board/repleUpdate?reple_num=<%=reple.reple_num%>'">수정</button>
-            <button onclick="reple_check()">삭제</button>
         </td>
     </tr>
 </table>

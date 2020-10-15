@@ -60,6 +60,10 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/repleWrite')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'repleDelete') {
+
+                    await require('./board/repleDelete')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
