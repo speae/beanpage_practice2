@@ -64,6 +64,10 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/repleDelete')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'repleADD') {
+
+                    await require('./board/repleADD')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -125,8 +129,13 @@ module.exports = async function (type, request, response) {
 
                     if (request.body.deleteNOW === "지금삭제") {
                         const num = request.body.num;
-                        db.setTable('board_table');
 
+                        db.setTable('board_table');
+                        if (await db.delete('num=?', [num]) === false) {
+                            throw "삭제 실패.";
+                        }
+
+                        db.setTable('reple');
                         if (await db.delete('num=?', [num]) === false) {
                             throw "삭제 실패.";
                         }
