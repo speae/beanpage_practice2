@@ -75,15 +75,18 @@
 
 
      function showReple(reple_number) {
-         var form = form.repleForm;
-         const reply = document.getElementById("reply"+reple_number);
+         const reply = document.getElementById(reple_number);
          const textBox = document.getElementById("textBox");
+         const reple_reple_content = document.getElementsByName("reple_reple_content");
+         const reple_parent = document.getElementsByName("reple_parent");
+         const reple_writer = document.getElementsByName("reple_writer");
+
          textBox.style.display="";
 
-         form.reple_reple_content.value="";
-         form.reple_parent.value=reple_number;
+         reple_reple_content.value="";
+         reple_parent.value=reple_number;
          reply.appendChild(textBox);
-         form.reple_writer.focus;
+         reple_writer.focus;
 
      }
 
@@ -121,7 +124,6 @@
     <%
     for(var i = 0; i < reple.length; i++){
         var reple_data = reple[i];
-        var reple_number = reple_data.reple_num;
         %>
     <tr>
         <td colspan="2" align="center"><%=reple_data.reple_writer%></td>
@@ -132,17 +134,17 @@
             <button onclick="location.href='/board/repleUpdate?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">수정</button>
             <button onclick="location.href='/board/repleDelete?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">삭제</button>
             <div class="commentBox">
-                    <a href="#" class="commentBtn" onclick="showReple(<%=reple_data.reple_num%>)">[댓글달기]</a>
+                    <a class="commentBtn" onclick="showReple(<%=reple_data.reple_num%>)">[댓글달기]</a>
+                <div id="<%=reple_data.reple_num%>"><%=reple_data.reple_reple_content%></div>
                     <div id="textBox" style="display:none">
                     <form name="repleForm" action="/board/repleADD" method="post">
-                        <input size="70" type="text" name="reple_writer" />
-                        <input size="70" type="text" name="reple_reple_content" />
+                        글쓴이: <input size="70" type="text" name="reple_writer" /><br>
+                        내용: <input size="70" type="text" name="reple_reple_content" />
                         <input type="hidden" name="reple_num" value="<%=reple_data.reple_num%>" />
                         <input type="hidden" name="reple_parent" value="<%=reple_data.reple_parent%>" />
                         <input type="submit" value="등록" />
                     </form>
                 </div>
-                <div id="reply=<%=reple_data.reple_num%>"><%=reple_data.reple_reple_content%></div>
             </div>
         </td>
     </tr>
