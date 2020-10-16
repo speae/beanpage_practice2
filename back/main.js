@@ -56,17 +56,17 @@ module.exports = async function (type, request, response) {
 
                await require('./board/delete')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'repleWrite') {
+                }else if (query_list[1] === 'replyWrite') {
 
-                    await require('./board/repleWrite')(request, response, render_data, query_list);
+                    await require('./board/replyWrite')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'repleDelete') {
+                }else if (query_list[1] === 'replyDelete') {
 
-                    await require('./board/repleDelete')(request, response, render_data, query_list);
+                    await require('./board/replyDelete')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'repleUpdate') {
+                }else if (query_list[1] === 'replyUpdate') {
 
-                    await require('./board/repleUpdate')(request, response, render_data, query_list);
+                    await require('./board/replyUpdate')(request, response, render_data, query_list);
 
                 }
             } else {
@@ -135,7 +135,7 @@ module.exports = async function (type, request, response) {
                             throw "삭제 실패.";
                         }
 
-                        db.setTable('reple');
+                        db.setTable('reply');
                         if (await db.delete('num=?', [num]) === false) {
                             throw "삭제 실패.";
                         }
@@ -144,17 +144,17 @@ module.exports = async function (type, request, response) {
                         throw "삭제 취소";
 
                     }
-                } else if (query_list[1].trim() === 'repleWrite') {
+                } else if (query_list[1].trim() === 'replyWrite') {
                     const reqBody = request.body;
 
-                    const reple_writer = reqBody['reple_writer'];
-                    const reple_content = reqBody['reple_content'];
+                    const reply_writer = reqBody['reply_writer'];
+                    const reply_content = reqBody['reply_content'];
                     const num = reqBody['num'];
 
-                    db.setTable('reple');
+                    db.setTable('reply');
                     db.add('num', num);
-                    db.add('reple_writer', reple_writer);
-                    db.add('reple_content', reple_content);
+                    db.add('reply_writer', reply_writer);
+                    db.add('reply_content', reply_content);
                     if (await db.insert() === false) {
                         throw "등록 실패.";
                     }

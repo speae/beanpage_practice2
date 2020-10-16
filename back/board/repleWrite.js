@@ -1,5 +1,5 @@
 /**
- * /board/repleWrite 랜더링 준비 처리
+ * /board/replyWrite 랜더링 준비 처리
  * @param request
  * @param response
  * @param render_data
@@ -11,7 +11,7 @@ module.exports = async function(request, response, render_data, query_list) {
     try{
 
         render_data.title = "게시판";
-        render_data.source = "board/repleWrite";
+        render_data.source = "board/replyWrite";
         throw "SUCCESS";
     }catch (e) {
         if (e === "SUCCESS") {
