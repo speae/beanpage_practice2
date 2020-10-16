@@ -11,7 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
     <style>
-        .textBox { display:none; }
+
         .top > ul > li {
             float: left;
             margin-left: 100px;
@@ -67,8 +67,28 @@
        }
      }
 
+     function hideDiv(id) {
+         let div = document.getElementById(id);
+         div.style.display = "none";
+         document.body.appendChild(div);
+     }
+
+
+     function showReple(reple_number) {
+         var form = form.repleForm;
+         const reply = document.getElementById("reply"+reple_number);
+         const textBox = document.getElementById("textBox");
+         textBox.style.display="";
+
+         form.reple_reple_content.value="";
+         form.reple_parent.value=reple_number;
+         reply.appendChild(textBox);
+         form.reple_writer.focus;
+
+     }
+
 </script>
-<table border="1" width=800">
+<table border="1" width="800">
         <tr>
             <td>번호</td><td><%=rows.num%></td>
         </tr>
@@ -101,6 +121,7 @@
     <%
     for(var i = 0; i < reple.length; i++){
         var reple_data = reple[i];
+        var reple_number = reple_data.reple_num;
         %>
     <tr>
         <td colspan="2" align="center"><%=reple_data.reple_writer%></td>
@@ -108,9 +129,21 @@
     </tr>
     <tr>
         <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reple_data.reple_content%><br>
-            <button onclick="location.href='/board/repleUpdate?num=<%=rows.num%>>&reple_num=<%=reple_data.reple_num%>'">수정</button>
+            <button onclick="location.href='/board/repleUpdate?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">수정</button>
             <button onclick="location.href='/board/repleDelete?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">삭제</button>
-
+            <div class="commentBox">
+                    <a href="#" class="commentBtn" onclick="showReple(<%=reple_data.reple_num%>)">[댓글달기]</a>
+                    <div id="textBox" style="display:none">
+                    <form name="repleForm" action="/board/repleADD" method="post">
+                        <input size="70" type="text" name="reple_writer" />
+                        <input size="70" type="text" name="reple_reple_content" />
+                        <input type="hidden" name="reple_num" value="<%=reple_data.reple_num%>" />
+                        <input type="hidden" name="reple_parent" value="<%=reple_data.reple_parent%>" />
+                        <input type="submit" value="등록" />
+                    </form>
+                </div>
+                <div id="reply=<%=reple_data.reple_num%>"><%=reple_data.reple_reple_content%></div>
+            </div>
         </td>
     </tr>
  <%
@@ -120,11 +153,11 @@
 <form action="/board/repleWrite" method="post">
     <table border="1" width=800">
     <tr>
-        <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reple_writer" value="<%=reple.reple_writer%>"></td>
+        <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reple_writer" value="<%=reple_data.reple_writer%>"></td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3"><input size="70" type="text" name="reple_content" value="<%=reple.reple_content%>" /></td>
+        <td colspan="3"><input size="70" type="text" name="reple_content" value="<%=reple_data.reple_content%>" /></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
