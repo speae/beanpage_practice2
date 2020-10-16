@@ -42,7 +42,7 @@
             width: 200px;
             height: 50px;
         }
-
+        ul li{list-style: none;}
     </style>
     <div class="title">
         게시판
@@ -57,7 +57,6 @@
 <BODY>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
-    let btn_toggle = 1;
      function check() {
        const question = confirm('삭제하시겠습니까?');
        if(question === true){
@@ -67,20 +66,7 @@
            location.href="/board/read?num=<%=rows.num%>";
        }
      }
-     function btn(){
-         if( btn_toggle === 1 ) {
-             $(".textBox").css("display","block");
-             btn_toggle = -1;
-         } else {
-             $(".textBox").css("display","none");
-             btn_toggle = 1;
-         }
-     }
-     $(function(){
-        $(".commentBtn").click(function () {
-            $("#text"+$(this).data("rel")).toggle();
-        })
-     });
+
 </script>
 <table border="1" width=800">
         <tr>
@@ -115,25 +101,16 @@
     <%
     for(var i = 0; i < reple.length; i++){
         var reple_data = reple[i];
- %>
+        %>
     <tr>
         <td colspan="2" align="center"><%=reple_data.reple_writer%></td>
         <td colspan="2" align="center"><%=reple_data.reple_date%></td>
     </tr>
     <tr>
         <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reple_data.reple_content%><br>
-            <button onclick="location.href='/board/update?num=<%=rows.num%>'">수정</button>
+            <button onclick="location.href='/board/repleUpdate?num=<%=rows.num%>>&reple_num=<%=reple_data.reple_num%>'">수정</button>
             <button onclick="location.href='/board/repleDelete?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">삭제</button>
-            <div class="commentBox">
-                <button class="commentBtn" onclick="btn()">[댓글달기]</button>
-                <div class="textBox">
-                    <div id="text">
-                    <form action="/board/repleADD" method="post">
-                        <input size="70" type="text" name="reple_content" />
-                    </form>
-                    </div>
-                </div>
-            </div>
+
         </td>
     </tr>
  <%

@@ -64,9 +64,9 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/repleDelete')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'repleADD') {
+                }else if (query_list[1] === 'repleUpdate') {
 
-                    await require('./board/repleADD')(request, response, render_data, query_list);
+                    await require('./board/repleUpdate')(request, response, render_data, query_list);
 
                 }
             } else {
