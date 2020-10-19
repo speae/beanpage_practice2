@@ -16,7 +16,7 @@ module.exports = async function(request, response, render_data, query_list) {
 
         const reqQuery = request.query;
         const num = reqQuery.num;
-        const reple_num = reqQuery.reple_num;
+        const reply_num = reqQuery.reply_num;
 
         const sql = "SELECT * FROM board_table WHERE num=?";
         const viewData = await db.queryOne(sql, [num]);
@@ -25,21 +25,21 @@ module.exports = async function(request, response, render_data, query_list) {
             throw "개인 게시글 불러오기 실패.";
         }
 
-        const repleSql = "SELECT * FROM reple WHERE num=?";
-        const repleData = await db.query(repleSql, [num]);
-        if (repleData === false) {
+        const replySql = "SELECT * FROM reply WHERE num=?";
+        const replyData = await db.query(replySql, [num]);
+        if (replyData === false) {
             throw "댓글불러오기 실패";
         }
 
-        db.setTable('reple');
-        db.add('reple_num', reple_num);
-        if (await db.delete('reple_num=?', [reple_num]) === false) {
+        db.setTable('reply');
+        db.add('reply_num', reply_num);
+        if (await db.delete('reply_num=?', [reply_num]) === false) {
             throw "삭제 실패.";
         }
 
         render_data.title = "게시판";
         render_data.rows = viewData;
-        render_data.reple = repleData;
+        render_data.reply = replyData;
         response.redirect('/board/read?num='+num);
         throw "SUCCESS";
     }catch (e) {

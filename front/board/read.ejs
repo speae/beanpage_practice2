@@ -12,15 +12,6 @@
 
     <style>
 
-        #commentBox{
-            display: none;
-            width: 100%;
-            height: 100%;
-        }
-
-        #hidetext{
-            display: none;
-        }
 
         .top > ul > li {
             float: left;
@@ -67,6 +58,7 @@
 <BODY>
 
 <script>
+
      function check() {
        const question = confirm('삭제하시겠습니까?');
        if(question === true){
@@ -77,60 +69,58 @@
        }
      }
 
-     // function hideDiv(id){
-     //     const div = document.getElementById(id);
-     //     div.style.display = "none";
-     //     document.body.appendChild(div);
-     // }
+     function hideDiv(id){
+         const div = document.getElementById(id);
+         div.style.display = "none";
+     }
 
-     $(function(){
+    let btn_toggle = -1;
 
-         let btn_toggle = 1;
+    function showReply(reply_number) {
+        if(btn_toggle === 1) {
 
-         $(".commentBtn").css({
-             "border":"1px solid #f00"
-         });
+            const reply_hidden = document.getElementById(reply_number);
 
-         $(".commentBtn").click(function() {
-             if(btn_toggle === 1) {
-                 $("#commentBox").css({
-                     "display":"block",
-                 });
-                 return btn_toggle = -1;
-             }else{
-                 $("#commentBox").css({
-                     "display":"none",
-                 });
-                 return btn_toggle = 1;
-             }
-         });
+            reply_hidden.style.display = "";
 
-     });
+            btn_toggle = -1;
+            console.log(reply_number);
+        }else{
+            const reply_hidden = document.getElementById(reply_number);
+            reply_hidden.style.display = "none";
+            btn_toggle = 1;
+            console.log(reply_number);
 
-     // function showreple(reple_number) {
-     //     if(btn_toggle === 1) {
+        }
+    }
+
+     // $(function(){
      //
-     //         const reple = document.getElementById(reple_number);
-     //         const textBox = document.getElementById("textBox");
-     //         const reple_add_content = document.getElementsByName("reple_add_content");
-     //         const reple_parent = document.getElementsByName("reple_parent");
-     //         const reple_writer = document.getElementsByName("reple_writer");
+     //     let btn_toggle = 1;
      //
-     //         textBox.style.display = "";
+     //     $(".commentBtn").css({
+     //         "border":"1px solid #f00"
+     //     });
      //
-     //         reple_add_content.value = "";
-     //         reple_parent.value = reple_number;
-     //         reple.appendChild(textBox);
-     //         reple_writer.focus;
+     //     $(".commentBtn").click(function() {
+     //         if(btn_toggle === 1) {
+     //             $(".reply_hidden").css({
+     //                 "display": "block"
+     //             })
+     //             return btn_toggle = -1;
+     //         }else{
+     //             $(".reply_hidden").css({
+     //                 "display": "none"
+     //             })
+     //             return btn_toggle = 1;
+     //         }
      //
-     //         btn_toggle = -1;
+     //           $(`button[id="${reply_num}.css{'display: 'none'}"]`)
+     //     });
      //
-     //     }else{
-     //         const textBox = document.getElementById("textBox");
-     //         textBox.style.display = "none";
-     //         btn_toggle = 1;
-     //     }
-     // }
+     //  });
+
+
 
 </script>
 <table border="1" width="800">
@@ -164,45 +154,44 @@
         <td colspan="4" align="center">댓글</td>
     </tr>
     <%
-    for(var i = 0; i < reple.length; i++){
-        var reple_data = reple[i];
+    for(var i = 0; i < reply.length; i++){
+        var reply_data = reply[i];
+
+        var reply_num = reply_data.reply_num;
+
          %>
     <tr>
-        <td colspan="2" align="center"><%=reple_data.reple_writer%></td>
-        <td colspan="2" align="center"><%=reple_data.reple_date%></td>
+        <td colspan="2" align="center"><%=reply_data.reply_writer%></td>
+        <td colspan="2" align="center"><%=reply_data.reply_date%></td>
     </tr>
     <tr>
-        <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reple_data.reple_content%><br>
-            <button onclick="location.href='/board/repleUpdate?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">수정</button>
-            <button onclick="location.href='/board/repleDelete?num=<%=rows.num%>&reple_num=<%=reple_data.reple_num%>'">삭제</button>
-                <button class="commentBtn">[댓글달기]
-                    <div id="commentBox">
-                        <div id="<%=reple_data.reple_num%>"><%=reple_data.reple_add_content%>
-                        <form name="repleForm" action="/board/repleWrite" method="post">
-                            글쓴이: <input size="70" type="text" name="reple_writer" /><br>
-                            내용: <input size="70" type="text" name="reple_reple_content" />
+        <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reply_data.reply_content%><br>
+            <button onclick="location.href='/board/replyUpdate?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">수정</button>
+            <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button>
+                <button onclick="showReply(<%=reply_num%>)">[댓글달기]</button>
+                    <div id="<%=reply_num%>">
+                        <form name="replyForm" action="/board/replyWrite" method="post">
+                            글쓴이: <input size="70" type="text" name="reply_writer" /><br>
+                            내용: <input size="70" type="text" name="reply_content" />
                             <input type="hidden" name="num" value="<%=rows.num%>" />
-                            <input type="hidden" name="reple_num" value="<%=reple_data.reple_num%>" />
-                            <input type="hidden" name="reple_parent" value="<%=reple_data.reple_parent%>" /><br>
+                            <input type="hidden" name="reply_num" value="<%=reply_data.reply_num%>" /><br>
                             <input type="submit" value="등록" />
                         </form>
-                        </div>
                     </div>
-                </button>
         </td>
     </tr>
  <%
  }
  %>
 </table>
-<form action="/board/repleWrite" method="post">
+<form action="/board/replyWrite" method="post">
     <table border="1" width=800">
     <tr>
-        <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reple_writer" /></td>
+        <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reply_writer" /></td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3"><input size="70" type="text" name="reple_content" /></td>
+        <td colspan="3"><input size="70" type="text" name="reply_content" /></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
