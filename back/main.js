@@ -68,10 +68,6 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/replyUpdate')(request, response, render_data, query_list);
 
-                }else if (query_list[1] === 'replyUpdate') {
-
-                    await require('./board/replyUpdate')(request, response, render_data, query_list);
-
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -172,10 +168,9 @@ module.exports = async function (type, request, response) {
                     const reply_content = reqBody['reply_content'];
 
                     db.setTable('reply');
-                    db.add('reply_num', reply_num);
                     db.add('reply_writer', reply_writer);
                     db.add('reply_content', reply_content);
-                    if (await db.update('num=?', [num]) === false) {
+                    if (await db.update('num=? AND reply_num=?', [num, reply_num]) === false) {
                         throw "수정 실패.";
                     }
                     response.redirect('/board/read?num='+num);

@@ -169,7 +169,7 @@
                 <button onclick="showReply(<%=reply_num%>)">[댓글수정]</button>
             <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button><br>
             <div id="<%=reply_num%>" style="display: none ">
-                        <form name="replyForm" action="/board/replyUpdate" method="post">
+                        <form action="/board/replyUpdate" method="post">
                             글쓴이: <input size="70" type="text" name="reply_writer" value="<%=reply_data.reply_writer%>" /><br>
                             내용: <input size="70" type="text" name="reply_content" value="<%=reply_data.reply_content%>" />
                             <input type="hidden" name="num" value="<%=rows.num%>" />
