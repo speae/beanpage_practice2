@@ -29,16 +29,16 @@ module.exports = async function (request, response, render_data, query_list) {
             throw "조회 실패";
         }
 
-        const replySql = "SELECT * FROM reply WHERE num=?";
-        const replyData = await db.query(replySql, [num]);
-        if (replyData === false) {
+        const repleSql = "SELECT * FROM reple WHERE num=?";
+        const repleData = await db.query(repleSql, [num]);
+        if (repleData === false) {
             throw "댓글불러오기 실패";
         }
 
         render_data.title = "게시판";
-        render_data.source = "board/replyUpdate";
+        render_data.source = "board/repleUpdate";
         render_data.rows = viewData;
-        render_data.reply = replyData;
+        render_data.reple = repleData;
 
         throw "SUCCESS";
     } catch (e) {
