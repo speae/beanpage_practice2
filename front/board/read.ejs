@@ -74,14 +74,14 @@
          div.style.display = "none";
      }
 
-    let btn_toggle = -1;
+    let btn_toggle = 1;
 
     function showReply(reply_number) {
         if(btn_toggle === 1) {
 
             const reply_hidden = document.getElementById(reply_number);
 
-            reply_hidden.style.display = "";
+            reply_hidden.style.display = "block";
 
             btn_toggle = -1;
             console.log(reply_number);
@@ -166,19 +166,18 @@
     </tr>
     <tr>
         <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reply_data.reply_content%><br>
-            <button onclick="location.href='/board/replyUpdate?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">수정</button>
-            <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button>
-                <button onclick="showReply(<%=reply_num%>)">[댓글달기]</button>
-                    <div id="<%=reply_num%>">
-                        <form name="replyForm" action="/board/replyWrite" method="post">
-                            글쓴이: <input size="70" type="text" name="reply_writer" /><br>
-                            내용: <input size="70" type="text" name="reply_content" />
+                <button onclick="showReply(<%=reply_num%>)">[댓글수정]</button>
+            <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button><br>
+            <div id="<%=reply_num%>" style="display: none ">
+                        <form name="replyForm" action="/board/replyUpdate" method="post">
+                            글쓴이: <input size="70" type="text" name="reply_writer" value="<%=reply_data.reply_writer%>" /><br>
+                            내용: <input size="70" type="text" name="reply_content" value="<%=reply_data.reply_content%>" />
                             <input type="hidden" name="num" value="<%=rows.num%>" />
                             <input type="hidden" name="reply_num" value="<%=reply_data.reply_num%>" /><br>
-                            <input type="submit" value="등록" />
+                            <input type="submit" value="댓글작성" />
                         </form>
                     </div>
-        </td>
+            </td>
     </tr>
  <%
  }

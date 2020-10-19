@@ -68,6 +68,10 @@ module.exports = async function (type, request, response) {
 
                     await require('./board/replyUpdate')(request, response, render_data, query_list);
 
+                }else if (query_list[1] === 'replyUpdate') {
+
+                    await require('./board/replyUpdate')(request, response, render_data, query_list);
+
                 }
             } else {
                 await require('./site/index')(request, response, render_data, query_list);
@@ -153,14 +157,26 @@ module.exports = async function (type, request, response) {
 
                     db.setTable('reply');
                     db.add('num', num);
-                    if (await db.update("num=?", [num]) === false) {
-                        throw "등록 실패.";
-                    }
-                    db.add('num', num);
                     db.add('reply_writer', reply_writer);
                     db.add('reply_content', reply_content);
                     if (await db.insert() === false) {
                         throw "등록 실패.";
+                    }
+                    response.redirect('/board/read?num='+num);
+                }else if (query_list[1].trim() === 'replyUpdate') {
+                    const reqBody = request.body;
+
+                    const num = reqBody['num'];
+                    const reply_num = reqBody['reply_num'];
+                    const reply_writer = reqBody['reply_writer'];
+                    const reply_content = reqBody['reply_content'];
+
+                    db.setTable('reply');
+                    db.add('reply_num', reply_num);
+                    db.add('reply_writer', reply_writer);
+                    db.add('reply_content', reply_content);
+                    if (await db.update('num=?', [num]) === false) {
+                        throw "수정 실패.";
                     }
                     response.redirect('/board/read?num='+num);
                 }
