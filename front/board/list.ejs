@@ -83,35 +83,47 @@
 <button onclick="location.href='/board/write'">글쓰기</button>
 </BODY>
 <footer>
-    <%
-        console.log(boardCount);
-    if(boardCount > 0){
-        const currentPage = currentPage;
-        const boardCount = boardCount;
-        const pageSize = pageSize;
-        const pageBlock = pageBlock;
+    <%=boardCount%>
+    <%=currentPage%>
+    <%=pageSize%>
+    <%=pageBlock%>
+    <div id="block"></div>
+    <script class="page">
+        const boardCount = `<%=boardCount%>`;
+        const currentPage = `<%=currentPage%>`;
+        const pageSize = `<%=pageSize%>`;
+        const pageBlock = `<%=pageBlock%>`;
+
         const pageCount = (boardCount / (pageSize + (boardCount % pageSize === 0 ? 0 : 1)));
         const showBlock = boardCount%pageBlock;
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
         const startPage = 1;
         const endPage = pageBlock;
 
-        for(var i = startPage; i < showBlock; i++){
-            if(boardCount <= pageLimit){ //한 게시판이 10개 이하면
-            %>
-            <a href="list?page=<%= i %>">[<%= i %>]</a>
-            <%
-            }else if(boardCount > showBlock && startPage !== 1){
-            %>
-        <a href="list?page=<%= startPage %>">[이전]</a>
-        <a href="list?page=<%= i %>">[<%= i %>]</a>
-        <a href="list?page=<%= showBlock+1 %>">[다음]</a>
-    <%
+        if(boardCount > 0){
+
+            for(var i = startPage; i < showBlock; i++){
+                if(boardCount <= pageLimit){ //한 게시판이 10개 이하면
+
+                    document.write(`<a href="list?page=`+i+`>[`+ i + `]</a>`);
+
+                }else if(boardCount > showBlock && startPage !== 1){
+
+                    document.write(`<a href="list?page=`+startPage+`>[이전]</a>`);
+                    document.write(`<a href="list?page=`+ i +`>[`+ i +`]</a>`);
+                    document.write(`<a href="list?page=`+ showBlock+1 +`>[다음]</a>`);\
+
+                }
             }
+        }else if(boardCount == 0){
+
+            document.write(`<a href="#">없음</a>`);
 
         }
 
-    }
-            %>
+        $(function () {
+            $(".page").wrap("<div id=\"block\"></div>")
+        })
+    </script>
 </footer>
 </html>
