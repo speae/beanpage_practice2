@@ -16,16 +16,19 @@ module.exports = async function(request, response, render_data, query_list) {
     if(page === 0) page = 1;
 
     const pageSize = 10;
-    const Size = pageSize.toString();
     const pageBlock = 10;
     const currentPage = page;
-    const pageNumber = count - (currentPage - 1) * pageSize;
+    const pageNumber = currentPage * pageSize;
 
-    const startRow=(currentPage-1)*pageSize+1; //최소 1
+    const startRow=(currentPage-1)*pageSize;
     const endRow=(currentPage)*pageSize;
+    const startSize = startRow.toString();
+    const endSize = endRow.toString();
 
-    const sql="SELECT @rowNumber := @rowNumber + 1 AS rowNumber, A.* FROM (SELECT * FROM board_table ORDER BY num DESC) A, (SELECT @rowNumber := 0 ) B WHERE @rowNumber<?";
-    const resultData = await db.query(sql, [Size]);
+    const setSql = "SET startSize=? and endSize=?";
+
+    const sql="SELECT * FROM board_table WHERE 1 ORDER BY num DESC LIMIT ?, ?";
+    const resultData = await db.query(sql, [startRow, endRow]);
     if(resultData===false){
         throw "게시글 불러오기 실패.";
     }

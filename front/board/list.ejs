@@ -98,23 +98,23 @@
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
         const startPage = 1;
         const endPage = pageBlock;
-        document.write(`<a href="list?page=`+startPage+`>[이전]</a>`);
+        document.write(`<a href="list?page="`+startPage+`>[이전]</a>`);
 
         if(boardCount > 0){
 
             for(var i = startPage; i < showBlock; i++){
                 if(boardCount <= pageLimit){ //한 게시판이 10개 이하면
 
-                    document.write(`<a href="list?page=`+i+`>[`+ i + `]</a>`);
+                    document.write(`<a href="list?page=` + i +  `"` + `>[` + i + `]</a>`);
 
                 }else if(boardCount > showBlock){
 
-                    document.write(`<a href="list?page=`+ i +`>[`+ i +`]</a>`);
+                    document.write(`<a href="list?page=` + i + `"` +`>[` + i +`]</a>`);
 
                 }
             }
         }
-        document.write(`<a href="list?page=`+ showBlock+1 +`>[다음]</a>`);
+        document.write(`<a href="list?page=` + showBlock+1 + `"` + `>[다음]</a>`);
 
     </script>
     </div>
