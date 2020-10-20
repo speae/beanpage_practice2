@@ -25,10 +25,8 @@ module.exports = async function(request, response, render_data, query_list) {
     const startSize = startRow.toString();
     const endSize = endRow.toString();
 
-    const setSql = "SET startSize=? and endSize=?";
-
     const sql="SELECT * FROM board_table WHERE 1 ORDER BY num DESC LIMIT ?, ?";
-    const resultData = await db.query(sql, [startRow, endRow]);
+    const resultData = await db.queryInteger(sql, [startRow, pageSize]);
     if(resultData===false){
         throw "게시글 불러오기 실패.";
     }

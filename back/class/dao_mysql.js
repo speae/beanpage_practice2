@@ -232,6 +232,26 @@ class DAO_MYSQL{
     }
 
     /**
+     *
+     * @param query
+     * @param {Number[]}params
+     * @param error_slack_alarm
+     * @returns {Promise<boolean|*>}
+     */
+    async queryInteger(query, params, error_slack_alarm=true){
+        let conn=false;
+        try {
+            conn = await this.connect();
+            if (conn===false) return false;
+            /* Step 3. */
+            const [rows] = await conn.query(query, params);
+            return rows;
+        } catch(err) {
+            return false;
+        }
+    }
+
+    /**
      * SQL 실행 (결과 레코드가 1개일경우)
      * @param {String} query
      * @param {[String]} params
