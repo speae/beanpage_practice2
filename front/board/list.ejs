@@ -106,17 +106,18 @@
         const currentPage = parseInt(`<%=currentPage%>`);
         const countResult = parseInt(`<%=countResult%>`);
         const pageSize = parseInt(`<%=pageSize%>`);
-        const pageBlock = `<%=pageBlock%>`;
+        const pageBlock = parseInt(`<%=pageBlock%>`);
 
         // const pageCount = (boardCount / (pageSize + (boardCount % pageSize === 0 ? 0 : 1))); // 27 / (10 + (27 % 10 === 1))
         const pageCount = Math.ceil(countResult / pageSize); //게시글이 27개에서 최대 게시글 출력양인 10으로 나누고 1을 더함.
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
-        const startPage = 1;
+        let startPage = 1;
         const nextPage = countResult / pageBlock;
-        let startBlock = parseInt(pageBlock);
+        let startBlock = Math.ceil(pageBlock);
         let addBlock = 10;
         let prevBlock = 0;
         let nextBlock = 0;
+        const result = ((Math.floor(currentPage / pageBlock)) * 10) + 1; // 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
 
         if(countResult > 0) { //게시글이 하나라도 존재할 때
             console.log(pageCount);
@@ -124,8 +125,8 @@
             console.log(pageLimit);
             console.log(nextPage);
             console.log(addBlock);
-            console.log(nextBlock);
             console.log(startBlock);
+            console.log(startPage);
 
             if (countResult <= pageSize && nextPage <= startPage) { //전체 게시글이 10개 <= 10 그리고 페이지로 넘어갈 수가 한 페이지도 못 채울 때
 
@@ -139,63 +140,68 @@
 
                 document.write(`<a href="#">[다음]</a>`);
 
-            }else if (countResult > pageSize && nextPage > startPage) { //전체 게시글이 10개를 초과할 때 그리고 페이지로 넘어갈 수가 한 페이지를 넘길 때
+            } else if (countResult > pageSize && nextPage > startPage) { //전체 게시글이 10개를 초과할 때 그리고 페이지로 넘어갈 수가 한 페이지를 넘길 때
 
                 if (currentPage === startPage) { //현재 페이지가 1이면
 
-                        document.write(`<a href="#">[이전]</a>`);
+                    document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`);
 
-                        if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
-
-                            for (let i = startPage; i <= pageCount; i++) {
-
-                                document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
-
-                            }
-
-                            document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
-
-                        }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때 ex) 11...>10
-
-                            addBlock = startBlock + addBlock; //블록 쌓기 --> 20, 30...
-                            nextBlock = ((addBlock*2)/(Math.ceil(pageCount / startBlock))) + 1; //다음 페이지 블록의 첫번째 블록
-
-                            for (let i = startPage; i <= pageCount; i++) {
-
-                                document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
-
-                            }
-
-                            document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
-
-                        }
-
-                }else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
-
-                    if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
-
-                        document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`); //처음 블록의 첫페이지로 이동
+                    if (pageCount <= pageLimit) { //페이지 수가 페이지 한계인 10 이하일 때
 
                         for (let i = startPage; i <= pageCount; i++) {
+
                             document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
                         }
 
-                        document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //처음 블록 맨 끝으로 이동
+                        document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
 
-                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때
+                    } else if (pageCount > pageLimit) { //페이지 수가 페이지 한계인 10을 초과할 때; 총 게시글 수가 100개가 넘을 때 ex) 11...>10
 
-                        addBlock = startBlock + pageCount - 1; //블록 쌓기 --> 20, 30...
-                        prevBlock = addBlock; //이전 페이지 블록의 마지막 블록
-                        nextBlock = addBlock + 1; //다음 페이지 블록의 첫번째 블록
+                        for (let i = startPage; i <= startBlock; i++) {
 
-                        document.write(`<a href="list?page=` + startBlock + `"` + `>[이전]</a>`); //이전 블록의 첫 블록로 이동
-
-                        for (let i = startPage; i <= pageCount; i++) {
                             document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
                         }
 
-                        document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                        document.write(`<a href="list?page=` + Math.ceil(startPage + startBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
+                    }
+
+                } else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
+
+                    if (currentPage % pageBlock === 0) { //현재 페이지가 10의 배수일 때; 10, 20, 30, ...
+
+                        if (currentPage === pageBlock) {
+
+                            if (countResult <= pageLimit) { //이 상태에서 페이지 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+
+                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`);
+
+                                //const result = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                for (let i = result; i <= pageCount; i++) {
+
+                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                }
+
+                                document.write(`<a href="list?page=` + currentPage + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                            }else if (currentPage > pageLimit) { //현재 페이지가 10의 배수가 아닐 때; 2, 3, 4, ...
+
+                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`);
+
+                                //const result = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                for (let i = result; i <= Math.ceil(result+(pageBlock-1)); i++) {
+
+                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                }
+
+                                document.write(`<a href="list?page=` + currentPage + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                            }
+                        }
                     }
                 }
             }
