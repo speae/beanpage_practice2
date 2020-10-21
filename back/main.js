@@ -102,14 +102,16 @@ module.exports = async function (type, request, response) {
             if (query_list[0] === 'board') {
                 if (query_list[1].trim() === 'write') {
 
-                    db.setTable('board_table');
-                    db.add('subject', subject);
-                    db.add('writer', writer);
-                    db.add('write_content', write_content);
-                    db.add('count', count);
+                    for(let i = 0; i<100; i++) {
+                        db.setTable('board_table');
+                        db.add('subject', subject);
+                        db.add('writer', writer);
+                        db.add('write_content', write_content);
+                        db.add('count', count);
 
-                    if (await db.insert() === false) {
-                        throw "게시글 작성 실패.";
+                        if (await db.insert() === false) {
+                            throw "게시글 작성 실패.";
+                        }
                     }
                     response.redirect('/board/list');
                 } else if (query_list[1].trim() === 'update') {

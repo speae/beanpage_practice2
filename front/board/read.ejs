@@ -57,72 +57,6 @@
 </HEAD>
 <BODY>
 
-<script>
-
-     function check() {
-       const question = confirm('삭제하시겠습니까?');
-       if(question === true){
-           location.href="/board/delete?num=<%=rows.num%>";
-       }else{
-           alert('취소하였습니다.')
-           location.href="/board/read?num=<%=rows.num%>";
-       }
-     }
-
-     function hideDiv(id){
-         const div = document.getElementById(id);
-         div.style.display = "none";
-     }
-
-    let btn_toggle = 1;
-
-    function showReply(reply_number) {
-        if(btn_toggle === 1) {
-
-            const reply_hidden = document.getElementById(reply_number);
-
-            reply_hidden.style.display = "block";
-
-            btn_toggle = -1;
-            console.log(reply_number);
-        }else{
-            const reply_hidden = document.getElementById(reply_number);
-            reply_hidden.style.display = "none";
-            btn_toggle = 1;
-            console.log(reply_number);
-
-        }
-    }
-
-     // $(function(){
-     //
-     //     let btn_toggle = 1;
-     //
-     //     $(".commentBtn").css({
-     //         "border":"1px solid #f00"
-     //     });
-     //
-     //     $(".commentBtn").click(function() {
-     //         if(btn_toggle === 1) {
-     //             $(".reply_hidden").css({
-     //                 "display": "block"
-     //             })
-     //             return btn_toggle = -1;
-     //         }else{
-     //             $(".reply_hidden").css({
-     //                 "display": "none"
-     //             })
-     //             return btn_toggle = 1;
-     //         }
-     //
-     //           $(`button[id="${reply_num}.css{'display: 'none'}"]`)
-     //     });
-     //
-     //  });
-
-
-
-</script>
 <table border="1" width="800">
         <tr>
             <td>번호</td><td><%=rows.num%></td>
@@ -154,10 +88,10 @@
         <td colspan="4" align="center">댓글</td>
     </tr>
     <%
-    for(var i = 0; i < reply.length; i++){
-        var reply_data = reply[i];
+    for(let i = 0; i < reply.length; i++){
+        const reply_data = reply[i];
 
-        var reply_num = reply_data.reply_num;
+        const reply_num = reply_data.reply_num;
 
          %>
     <tr>
@@ -201,6 +135,71 @@
 </table>
 </form>
 <button onclick="location.href='/board/list'">돌아가기</button>
-</BODY>
 
+<script>
+
+    function check() {
+        const question = confirm('삭제하시겠습니까?');
+        if(question === true){
+            location.href="/board/delete?num=<%=rows.num%>";
+        }else{
+            alert('취소하였습니다.')
+            location.href="/board/read?num=<%=rows.num%>";
+        }
+    }
+
+    function hideDiv(id){
+        const div = document.getElementById(id);
+        div.style.display = "none";
+    }
+
+    let btn_toggle = 1;
+
+    function showReply(reply_number) {
+        if(btn_toggle === 1) {
+
+            const reply_hidden = document.getElementById(reply_number);
+
+            reply_hidden.style.display = "block";
+
+            btn_toggle = -1;
+            console.log(reply_number);
+        }else{
+            const reply_hidden = document.getElementById(reply_number);
+            reply_hidden.style.display = "none";
+            btn_toggle = 1;
+            console.log(reply_number);
+
+        }
+    }
+
+    // $(function(){
+    //
+    //     let btn_toggle = 1;
+    //
+    //     $(".commentBtn").css({
+    //         "border":"1px solid #f00"
+    //     });
+    //
+    //     $(".commentBtn").click(function() {
+    //         if(btn_toggle === 1) {
+    //             $(".reply_hidden").css({
+    //                 "display": "block"
+    //             })
+    //             return btn_toggle = -1;
+    //         }else{
+    //             $(".reply_hidden").css({
+    //                 "display": "none"
+    //             })
+    //             return btn_toggle = 1;
+    //         }
+    //
+    //           $(`button[id="${reply_num}.css{'display: 'none'}"]`)
+    //     });
+    //
+    //  });
+
+</script>
+
+</BODY>
 </html>
