@@ -21,9 +21,6 @@ module.exports = async function(request, response, render_data, query_list) {
     const pageNumber = currentPage * pageSize;
 
     const startRow=(currentPage-1)*pageSize;
-    const endRow=(currentPage)*pageSize;
-    const startSize = startRow.toString();
-    const endSize = endRow.toString();
 
     const sql="SELECT * FROM board_table WHERE 1 ORDER BY num DESC LIMIT ?, ?";
     const resultData = await db.queryInteger(sql, [startRow, pageSize]);
@@ -43,7 +40,7 @@ module.exports = async function(request, response, render_data, query_list) {
 
     try{
 
-        render_data.boardCount = countResult;
+        render_data.countResult = countResult;
         render_data.pageSize = pageSize;
         render_data.pageBlock = pageBlock;
         render_data.currentPage = currentPage;

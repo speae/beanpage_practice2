@@ -87,35 +87,109 @@
 </BODY>
 <footer>
     <div id="block">
+<!--        const pageSize = 10;-->
+<!--        const pageBlock = 10;-->
+<!--        const currentPage = page;-->
+<!--        const pageNumber = currentPage * pageSize;-->
+
+<!--        const startRow=(currentPage-1)*pageSize;-->
+
+<!--        const sql="SELECT * FROM board_table WHERE 1 ORDER BY num DESC LIMIT ?, ?";-->
+<!--        const resultData = await db.queryInteger(sql, [startRow, pageSize]);-->
+<!--        if(resultData===false){-->
+<!--        throw "게시글 불러오기 실패.";-->
+<!--        }-->
+
+<!--        const count = "SELECT COUNT(*) FROM board_table"-->
+<!--        const boardCount = await db.queryOne(count, []); = 27-->
     <script class="page">
-        const boardCount = `<%=boardCount%>`;
         const currentPage = `<%=currentPage%>`;
-        const pageSize = `<%=pageSize%>`;
+        const countResult = parseInt(`<%=countResult%>`);
+        const pageSize = parseInt(`<%=pageSize%>`);
         const pageBlock = `<%=pageBlock%>`;
 
-        const pageCount = (boardCount / (pageSize + (boardCount % pageSize === 0 ? 0 : 1)));
-        const showBlock = boardCount/pageBlock;
+        // const pageCount = (boardCount / (pageSize + (boardCount % pageSize === 0 ? 0 : 1))); // 27 / (10 + (27 % 10 === 1))
+        const pageCount = (countResult / pageSize)+1; //게시글이 27개에서 최대 게시글 출력양인 10으로 나누고 1을 더함.
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
         const startPage = 1;
-        const endPage = pageBlock;
+        const nextPage = countResult / pageBlock;
+        let startBlock = parseInt(pageBlock);
+        let addBlock;
+        let nextBlock;
 
-        if(boardCount > 0){
+        if(countResult > 0) { //게시글이 하나라도 존재할 때
+            console.log(pageCount);
+            console.log(countResult);
+            console.log(pageLimit);
+            console.log(nextPage);
 
-            if(boardCount <= pageLimit){ //한 게시판이 10개 이하면
+            if (countResult <= pageSize && nextPage <= startPage) { //전체 게시글이 10개 <= 10 그리고 페이지로 넘어갈 수가 한 페이지도 못 채울 때
 
                 document.write(`<a href="#">[이전]</a>`);
-                document.write(`<a href="list?page=` + i +  `"` + `>[` + i + `]</a>`);
-                document.write(`<a href="#">[다음]</a>`);
 
-            }else if(boardCount > showBlock){
+                for (var i = startPage; i <= startPage; i++) {
 
-                document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`);
-                for(var i = startPage; i < showBlock; i++){
-
-                    document.write(`<a href="list?page=` + i + `"` +`>[` + i +`]</a>`);
+                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`); //첫 페이지만 활성
 
                 }
-                document.write(`<a href="list?page=` + showBlock+1 + `"` + `>[다음]</a>`);
+
+                document.write(`<a href="#">[다음]</a>`);
+
+            }else if (countResult > pageSize && nextPage > startPage) { //전체 게시글이 10개를 초과할 때 그리고 페이지로 넘어갈 수가 한 페이지를 넘길 때
+
+                if (currentPage == startPage) { //현재 페이지가 1이면
+
+                        document.write(`<a href="#">[이전]</a>`);
+
+                        for (var i = startPage; i <= pageCount; i++) {
+                            document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                        }
+
+                        if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
+
+                            document.write(`<a href="list?page=` + startBlock + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
+
+                        }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때 ex) 11...>10
+
+                            addBlock = startBlock + pageCount - 1; //블록 쌓기 --> 20, 30...
+                            nextBlock = addBlock + 1; //다음 페이지 블록의 첫번째 블록
+                            console.log(addBlock);
+                            console.log(nextBlock);
+                            document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                        }
+
+                }else if (currentPage != startPage) { //현재 첫 페이지가 아닌 상태
+
+                    if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
+
+                        document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`); //처음 블록의 첫페이지로 이동
+
+                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
+
+                        document.write(`<a href="list?page=` + startBlock + `"` + `>[다음]</a>`); //이전 블록의 첫 블록로 이동
+
+                    }
+
+                    for (var i = startPage; i <= pageCount; i++) {
+                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                    }
+
+                    if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
+
+                        document.write(`<a href="list?page=` + startBlock + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
+
+                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때 ex) 11...>10
+
+                        addBlock = startBlock + pageCount - 1; //블록 쌓기 --> 20, 30...
+                        nextBlock = addBlock + 1; //다음 페이지 블록의 첫번째 블록
+                        console.log(addBlock);
+                        console.log(nextBlock);
+                        document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                    }
+
+                }
 
             }
         }
