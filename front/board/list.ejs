@@ -103,13 +103,13 @@
 <!--        const count = "SELECT COUNT(*) FROM board_table"-->
 <!--        const boardCount = await db.queryOne(count, []); = 27-->
     <script class="page">
-        const currentPage = `<%=currentPage%>`;
-        const countResult = `<%=countResult%>`;
-        const pageSize = `<%=pageSize%>`;
+        const currentPage = parseInt(`<%=currentPage%>`);
+        const countResult = parseInt(`<%=countResult%>`);
+        const pageSize = parseInt(`<%=pageSize%>`);
         const pageBlock = `<%=pageBlock%>`;
 
         // const pageCount = (boardCount / (pageSize + (boardCount % pageSize === 0 ? 0 : 1))); // 27 / (10 + (27 % 10 === 1))
-        const pageCount = parseInt((countResult / pageSize)+1); //게시글이 27개에서 최대 게시글 출력양인 10으로 나누고 1을 더함.
+        const pageCount = Math.ceil(countResult / pageSize); //게시글이 27개에서 최대 게시글 출력양인 10으로 나누고 1을 더함.
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
         const startPage = 1;
         const nextPage = countResult / pageBlock;
@@ -124,12 +124,13 @@
             console.log(nextPage);
             console.log(addBlock);
             console.log(nextBlock);
+            console.log(startBlock);
 
             if (countResult <= pageSize && nextPage <= startPage) { //전체 게시글이 10개 <= 10 그리고 페이지로 넘어갈 수가 한 페이지도 못 채울 때
 
                 document.write(`<a href="#">[이전]</a>`);
 
-                for (var i = startPage; i <= startPage; i++) {
+                for (let i = startPage; i <= startPage; i++) {
 
                     document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`); //첫 페이지만 활성
 
@@ -139,11 +140,11 @@
 
             }else if (countResult > pageSize && nextPage > startPage) { //전체 게시글이 10개를 초과할 때 그리고 페이지로 넘어갈 수가 한 페이지를 넘길 때
 
-                if (currentPage == startPage) { //현재 페이지가 1이면
+                if (currentPage === startPage) { //현재 페이지가 1이면
 
                         document.write(`<a href="#">[이전]</a>`);
 
-                        for (var i = startPage; i <= pageCount; i++) {
+                        for (let i = startPage; i <= pageCount; i++) {
                             document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
                         }
 
@@ -159,38 +160,35 @@
 
                         }
 
-                }else if (currentPage != startPage) { //현재 첫 페이지가 아닌 상태
+                }else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
 
                     if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
 
                         document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`); //처음 블록의 첫페이지로 이동
 
-                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
+                        for (let i = startPage; i <= pageCount; i++) {
+                            document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                        }
 
-                        document.write(`<a href="list?page=` + startBlock + `"` + `>[다음]</a>`); //이전 블록의 첫 블록로 이동
+                        document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //처음 블록 맨 끝으로 이동
 
-                    }
+                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때
 
-                    for (var i = startPage; i <= pageCount; i++) {
-                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
-                    }
-
-                    if (pageCount <= startBlock) { //페이지 수가 기본 블록수인 10개 이하일 때
-
-                        document.write(`<a href="list?page=` + startBlock + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
-
-                    }else if (pageCount > startBlock) { //페이지 수가 기본 블록수인 10개를 초과할 때 ex) 11...>10
+                        document.write(`<a href="list?page=` + startBlock + `"` + `>[이전]</a>`); //이전 블록의 첫 블록로 이동
 
                         addBlock = startBlock + pageCount - 1; //블록 쌓기 --> 20, 30...
                         nextBlock = addBlock + 1; //다음 페이지 블록의 첫번째 블록
                         console.log(addBlock);
                         console.log(nextBlock);
+
+                        for (let i = startPage; i <= pageCount; i++) {
+                            document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                        }
+
                         document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                     }
-
                 }
-
             }
         }
 
