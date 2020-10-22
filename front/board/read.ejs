@@ -95,7 +95,20 @@
 
          %>
 <script>
-    $fu
+    $(function (){
+
+        const href = "back/board/read.js";
+
+        $.ajax({
+            url: href,
+            type: "post",
+            dataType: "jsonp"
+        }).done(function replyData(reply_data){
+            if(reply_data.length > 0){
+                const $table = $
+            }
+        })
+    })
 </script>
 
     <tr>
@@ -157,9 +170,11 @@
                 type: "post",
                 dataType: "json",
                 data: replyData,
+                async : true,
 
                 success: function () {
                     alert("댓글 작성 성공");
+                    location.href="/board/read?num=<%=rows.num%>";
                 }
             })
         })
