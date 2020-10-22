@@ -79,25 +79,28 @@
 
     $(function (){
 
-        const $frm = $(".write");
+        const $add = $(".write");
 
-        $frm.on("submit", function (e) {
+        $add.on("submit", function (e) {
 
-            e.preventDefault();
-            const writeData = $frm.serialize();
+            e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
+            const writeData = $add.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
 
             $.ajax({
 
-                url: $frm.attr("action"),
+                url: $add.attr("action"),
                 type: "post",
+                dataType: "json",
                 data: writeData,
 
-                success: function (res) {
-                    alert("success");
+                success: function () {
+                    alert("본문 작성 성공");
+                    location.href="/board/list";
                 }
             })
         })
     })
+
 </script>
 </footer>
 </html>

@@ -113,7 +113,7 @@
         const pageLimit = currentPage * pageSize; //현재 페이지가 1이면 10 --> 무한히 증가하게 됨.
         let startPage = 1; //첫 페이지
         let firstBlock = Math.ceil(pageBlock); //첫 블록
-        const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; // 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+        const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; //11/10 --> 1*10 --> 10+1 = 11, 21/10 --> 2*10 --> 20+1 = 21, ...
         const prevBlock = startBlock - 1;
         const nextBlock = Math.ceil(startBlock + pageBlock);
 
@@ -248,15 +248,29 @@
 
                             }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
 
-                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+                                document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
 
-                                for (let i = startPage; i <= firstBlock; i++) {
+                                if(pageCount > firstBlock) {
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                    for (let i = startBlock; i <= firstBlock; i++) {
+
+                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                    }
+
+                                    document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                }else if(pageCount <=  firstBlock){
+
+                                    for (let i = startBlock; i <= pageCount; i++) {
+
+                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                    }
+
+                                    document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                                 }
-
-                                document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
                             }
                         }else if(currentPage > pageBlock) { // 11, 12, 13, ...
 
@@ -277,7 +291,7 @@
 
                                 document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
 
-                                if(pageCount > nextBlock-1) {
+                                if(pageCount > nextBlock-1) { //페이지 수가 블록을 넘길 때
 
                                     for (let i = startBlock; i <= Math.ceil(startBlock + (pageBlock - 1)); i++) {
 
@@ -287,7 +301,7 @@
 
                                     document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
-                                }else if(pageCount <=  nextBlock-1){
+                                }else if(pageCount <=  nextBlock-1){ //페이지 수가 블록 이하일 때
 
                                     for (let i = startBlock; i <= pageCount; i++) {
 

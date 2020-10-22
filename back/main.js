@@ -102,7 +102,6 @@ module.exports = async function (type, request, response) {
             if (query_list[0] === 'board') {
                 if (query_list[1].trim() === 'write') {
 
-                    for(let i = 0; i<100; i++) {
                         db.setTable('board_table');
                         db.add('subject', subject);
                         db.add('writer', writer);
@@ -112,7 +111,7 @@ module.exports = async function (type, request, response) {
                         if (await db.insert() === false) {
                             throw "게시글 작성 실패.";
                         }
-                    }
+
                     response.json('/board/list');
                     //response.redirect('/board/list');
                 } else if (query_list[1].trim() === 'update') {
@@ -161,7 +160,7 @@ module.exports = async function (type, request, response) {
                     if (await db.insert() === false) {
                         throw "등록 실패.";
                     }
-                    response.redirect('/board/read?num='+num);
+                    response.json('/board/read?num='+num);
                 }else if (query_list[1].trim() === 'replyUpdate') {
                     const reqBody = request.body;
 

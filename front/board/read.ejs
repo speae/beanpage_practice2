@@ -94,6 +94,10 @@
         const reply_num = reply_data.reply_num;
 
          %>
+<script>
+    $fu
+</script>
+
     <tr>
         <td colspan="2" align="center"><%=reply_data.reply_writer%></td>
         <td colspan="2" align="center"><%=reply_data.reply_date%></td>
@@ -108,7 +112,7 @@
                             내용: <input size="70" type="text" name="reply_content" value="<%=reply_data.reply_content%>" />
                             <input type="hidden" name="num" value="<%=rows.num%>" />
                             <input type="hidden" name="reply_num" value="<%=reply_data.reply_num%>" /><br>
-                            <input type="submit" value="댓글작성" />
+                            <input type="submit" value="[댓글수정완료]" />
                         </form>
                     </div>
             </td>
@@ -117,7 +121,7 @@
  }
  %>
 </table>
-<form action="/board/replyWrite" method="post">
+<form action="/board/replyWrite" method="post" class="replyWrite">
     <table border="1" width=800">
     <tr>
         <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reply_writer" /></td>
@@ -137,6 +141,29 @@
 <button onclick="location.href='/board/list'">돌아가기</button>
 
 <script>
+
+    $(function (){
+
+        const $replyWrite = $(".replyWrite");
+
+        $replyWrite.on("submit", function (e) {
+
+            e.preventDefault();
+            const replyData = $replyWrite.serialize();
+
+            $.ajax({
+
+                url: $replyWrite.attr("action"),
+                type: "post",
+                dataType: "json",
+                data: replyData,
+
+                success: function () {
+                    alert("댓글 작성 성공");
+                }
+            })
+        })
+    })
 
     function check() {
         const question = confirm('삭제하시겠습니까?');
