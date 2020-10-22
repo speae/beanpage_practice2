@@ -54,23 +54,20 @@
 </HEAD>
 <BODY>
 <div class="writeWrap">
-<form method="post" action="/board/write" class="write">
     <table>
-
         <tr>
-            <td>제목</td><td><input type="text" name="subject"></td>
+            <td>제목</td><td><input type="text" name="subject" id="subject"></td>
         </tr>
         <tr>
-            <td>글쓴이</td> <td><input type="text" name="writer"></td>
+            <td>글쓴이</td> <td><input type="text" name="writer" id="writer"></td>
         </tr>
         <tr>
-            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"></textarea></td>
+            <td>내용</td><td><textarea cols="23" rows="15" name="write_content" id="write_content"></textarea></td>
         </tr>
         <tr>
-            <td><input type="submit" value="입력"></td>
+            <td><button id="add_btn">입력</button></td>
         </tr>
     </table>
-</form>
 <button onclick="location.href='/board/list'">돌아가기</button>
 </div>
 </BODY>
@@ -79,27 +76,26 @@
 
     $(function (){
 
-        const $add = $(".write");
-
-        $add.on("submit", function (e) {
-
-            e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
-            const writeData = $add.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
+        $("#add_btn").on("click", function () {
 
             $.ajax({
 
-                url: $add.attr("action"),
+                url: "/board/write",
                 type: "post",
                 dataType: "json",
-                data: writeData,
+                data: {
+                    subject : $("#subject").val(),
+                    writer : $("#writer").val(),
+                    write_content : $("#write_content").val()
+                },
                 async : true,
 
-                success: function () {
+                success: function (res) {
                     alert("본문 작성 성공");
                     location.href="/board/list";
                 },
 
-                error: function (){
+                error: function (xhr){
                     alert("본문 작성 실패");
                     location.href="/board/list";
                 }

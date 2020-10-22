@@ -18,8 +18,7 @@
 
         $("#delete_btn").off("click").on("click", function () {
             if($("#deleteNOW").val()!=="지금삭제"){
-                alert("삭제 실패");
-                history.go(-1);
+                alert("다시 입력하세요.");
                 return;
             }
             $.ajax({
@@ -33,7 +32,7 @@
                 async: true,
 
                 success: function (result) {
-                    alert("댓글 삭제 성공");
+                    alert("본문 삭제 성공");
                     location.href = "/board/list";
                 }
             });
