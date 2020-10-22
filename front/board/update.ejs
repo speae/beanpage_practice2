@@ -57,48 +57,50 @@
 <form method="post" action="/board/update" class="update">
     <table>
         <tr>
-            <td>번호</td><td><input type="text" name="num" value="<%=rows.num%>" readonly></td>
+            <td>번호</td><td><input id="num" type="text" name="num" value="<%=rows.num%>" readonly></td>
         </tr>
         <tr>
-            <td>작성일</td><td><input type="text" name="write_date" value="<%=rows.write_date%>" readonly></td>
+            <td>작성일</td><td><input id="write_date" type="text" name="write_date" value="<%=rows.write_date%>" readonly></td>
         </tr>
         <tr>
-            <td>조회수</td><td><input type="text" name="count" value="<%=rows.count%>" readonly></td>
+            <td>조회수</td><td><input id="count" type="text" name="count" value="<%=rows.count%>" readonly></td>
         </tr>
         <tr>
-            <td>제목</td><td><input type="text" name="subject" value="<%=rows.subject%>"></td>
+            <td>제목</td><td><input id="subject" type="text" name="subject" value="<%=rows.subject%>"></td>
         </tr>
         <tr>
-            <td>글쓴이</td><td><input type="text" name="writer" value="<%=rows.writer%>"></td>
+            <td>글쓴이</td><td><input id="writer" type="text" name="writer" value="<%=rows.writer%>"></td>
         </tr>
         <tr>
-            <td>내용</td><td><textarea cols="23" rows="15" name="write_content"><%=rows.write_content%></textarea></td>
+            <td>내용</td><td><textarea id="write_content" cols="23" rows="15" name="write_content"><%=rows.write_content%></textarea></td>
         </tr>
         <tr>
-            <td><input type="submit" value="확인"></td>
+            <td><button id="update_btn">수정 확인</button></td>
         </tr>
     </table>
 </form>
-<button onclick="location.href='/board/list'">돌아가기</button>
+<button onclick="location.href='/board/read?num=<%=rows.num%>'">이전 화면</button>
 </BODY>
 <footer>
     <script>
 
         $(function (){
 
-            const $update = $(".update");
-
-            $update.on("submit", function (e) {
-
-                e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
-                const updateData = $update.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
+            $("#update_btn").off("click").on("click", function (e) {
 
                 $.ajax({
 
-                    url: $update.attr("action"),
+                    url: "/board/update",
                     type: "post",
                     dataType: "json",
-                    data: updateData,
+                    data: {
+                        num : $("#num").val(),
+                        write_date : $("#write_date").val(),
+                        count : $("#count").val(),
+                        subject : $("#subject").val(),
+                        writer : $("#writer").val(),
+                        write_content : $("#write_content").val()
+                    },
                     async : true,
 
                     success: function () {
