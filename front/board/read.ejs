@@ -89,6 +89,7 @@
     </tr>
     <%
     for(let i = 0; i < reply.length; i++){
+
         const reply_data = reply[i];
 
         const reply_num = reply_data.reply_num;
@@ -196,6 +197,11 @@
 
                 success: function () {
                     alert("댓글 작성 성공");
+                    location.href="/board/read?num=<%=rows.num%>";
+                },
+
+                error: function (){
+                    alert("댓글 작성 실패");
                     location.href="/board/read?num=<%=rows.num%>";
                 }
             })

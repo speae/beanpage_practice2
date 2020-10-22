@@ -128,9 +128,9 @@ module.exports = async function (type, request, response) {
                     }
                     response.json('/board/read?num='+num);
                 } else if (query_list[1].trim() === 'delete') {
+                       const num = request.body.num;
 
-                    if (request.body.deleteNOW === "지금삭제") {
-                        const num = request.body.num;
+
 
                         db.setTable('board_table');
                         if (await db.delete('num=?', [num]) === false) {
@@ -142,10 +142,7 @@ module.exports = async function (type, request, response) {
                             throw "삭제 실패.";
                         }
                         response.json('/board/delete');
-                    } else {
-                        throw "삭제 취소";
 
-                    }
                 } else if (query_list[1].trim() === 'replyWrite') {
                     const reqBody = request.body;
 

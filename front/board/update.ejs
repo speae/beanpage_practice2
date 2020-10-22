@@ -104,6 +104,11 @@
                     success: function () {
                         alert("본문 수정 성공");
                         location.href="/board/read?num=<%=rows.num%>";
+                    },
+
+                    error: function () {
+                        alert("본문 수정 실패");
+                        location.href="/board/read?num=<%=rows.num%>";
                     }
                 })
             })
