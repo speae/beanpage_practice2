@@ -95,20 +95,20 @@
 
          %>
 <script>
-    $(function (){
-
-        const href = "back/board/read.js";
-
-        $.ajax({
-            url: href,
-            type: "post",
-            dataType: "jsonp"
-        }).done(function replyData(reply_data){
-            if(reply_data.length > 0){
-                const $table = $
-            }
-        })
-    })
+    // $(function (){
+    //
+    //     const href = "back/board/read.js";
+    //
+    //     $.ajax({
+    //         url: href,
+    //         type: "post",
+    //         dataType: "jsonp"
+    //     }).done(function replyData(reply_data){
+    //         if(reply_data.length > 0){
+    //
+    //         }
+    //     })
+    // })
 </script>
 
     <tr>
@@ -117,10 +117,10 @@
     </tr>
     <tr>
         <td colspan="4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=reply_data.reply_content%><br>
-                <button onclick="showReply(<%=reply_num%>)">[댓글수정]</button>
+            <button onclick="showReply(<%=reply_num%>)">[댓글수정]</button>
             <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button><br>
             <div id="<%=reply_num%>" style="display: none ">
-                        <form action="/board/replyUpdate" method="post">
+                        <form action="/board/replyUpdate" method="post" class="replyUpdate">
                             글쓴이: <input size="70" type="text" name="reply_writer" value="<%=reply_data.reply_writer%>" /><br>
                             내용: <input size="70" type="text" name="reply_content" value="<%=reply_data.reply_content%>" />
                             <input type="hidden" name="num" value="<%=rows.num%>" />
@@ -157,9 +157,31 @@
 
     $(function (){
 
+        const $replyUpdate = $(".replyUpdate");
+
+        $replyUpdate.on("submit", function (d) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
+
+            d.preventDefault();
+            const replyUpdateData = $replyUpdate.serialize();
+
+            $.ajax({
+
+                url: $replyUpdate.attr("action"),
+                type: "post",
+                dataType: "json",
+                data: replyUpdateData,
+                async : true,
+
+                success: function () {
+                    alert("댓글 수정 성공");
+                    location.href="/board/read?num=<%=rows.num%>";
+                }
+            })
+        })
+
         const $replyWrite = $(".replyWrite");
 
-        $replyWrite.on("submit", function (e) {
+        $replyWrite.on("submit", function (e) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
 
             e.preventDefault();
             const replyData = $replyWrite.serialize();
@@ -178,7 +200,7 @@
                 }
             })
         })
-    })
+ })
 
     function check() {
         const question = confirm('삭제하시겠습니까?');

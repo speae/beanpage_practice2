@@ -54,7 +54,7 @@
 </HEAD>
 <BODY>
 
-<form method="post" action="/board/update">
+<form method="post" action="/board/update" class="update">
     <table>
         <tr>
             <td>번호</td><td><input type="text" name="num" value="<%=rows.num%>" readonly></td>
@@ -82,6 +82,33 @@
 <button onclick="location.href='/board/list'">돌아가기</button>
 </BODY>
 <footer>
+    <script>
 
+        $(function (){
+
+            const $update = $(".update");
+
+            $update.on("submit", function (e) {
+
+                e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
+                const writeData = $update.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
+
+                $.ajax({
+
+                    url: $update.attr("action"),
+                    type: "post",
+                    dataType: "json",
+                    data: writeData,
+                    async : true,
+
+                    success: function () {
+                        alert("본문 수정 성공");
+                        location.href="/board/read?num=<%=rows.num%>";
+                    }
+                })
+            })
+        })
+
+    </script>
 </footer>
 </html>

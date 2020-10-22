@@ -126,7 +126,7 @@ module.exports = async function (type, request, response) {
                     if (await db.update('num=?', [num]) === false) {
                         throw "수정 실패.";
                     }
-                    response.redirect('/board/list');
+                    response.json('/board/read?num='+num);
                 } else if (query_list[1].trim() === 'delete') {
 
                     if (request.body.deleteNOW === "지금삭제") {
@@ -175,7 +175,8 @@ module.exports = async function (type, request, response) {
                     if (await db.update('num=? AND reply_num=?', [num, reply_num]) === false) {
                         throw "수정 실패.";
                     }
-                    response.redirect('/board/read?num='+num);
+                    //response.redirect('/board/read?num='+num);
+                    response.json('/board/read?num='+num);
                 }
             }
         }
