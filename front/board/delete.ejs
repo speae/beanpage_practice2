@@ -4,14 +4,40 @@
     <meta charset="UTF-8">
 </HEAD>
 <body>
-<form method="post" action="/board/delete">
+<form method="post" action="/board/delete" class="delete">
     <tr>
     <td><input size="100" type="text" name="deleteNOW" placeholder="삭제를 원하신다면 '지금삭제'를 입력하세요." /></td>
     <td><input type="submit" value="확인" /></td>
     </tr>
     <input type="hidden" name="num" value="<%=rows.num%>" />
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+
+    $(function (){
+
+        const $delete = $(".delete");
+
+        $delete.on("submit", function (e) {
+
+            e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
+            const deleteData = $delete.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
+
+            $.ajax({
+
+                url: $delete.attr("action"),
+                type: "post",
+                dataType: "json",
+                data: deleteData,
+                async : true,
+
+                success: function () {
+                    alert("본문 삭제 성공");
+                    location.href="/board/list";
+                }
+            })
+        })
+    })
 
 </script>
 </body>

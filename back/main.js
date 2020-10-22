@@ -141,7 +141,7 @@ module.exports = async function (type, request, response) {
                         if (await db.delete('num=?', [num]) === false) {
                             throw "삭제 실패.";
                         }
-                        response.redirect('/board/list');
+                        response.json('/board/delete');
                     } else {
                         throw "삭제 취소";
 

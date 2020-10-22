@@ -91,14 +91,14 @@
             $update.on("submit", function (e) {
 
                 e.preventDefault(); //버튼을 눌러도 action 페이지로 이동 x
-                const writeData = $update.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
+                const updateData = $update.serialize(); //form 요소에 작성한 값을 쿼리 스트링 데이터로 변환하여 writeData 에 대입
 
                 $.ajax({
 
                     url: $update.attr("action"),
                     type: "post",
                     dataType: "json",
-                    data: writeData,
+                    data: updateData,
                     async : true,
 
                     success: function () {
