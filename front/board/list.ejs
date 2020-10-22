@@ -280,13 +280,27 @@
 
                                 document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
 
-                                for (let i = addBlock; i <= Math.ceil(addBlock + (pageBlock -1)); i++) {
+                                if(pageCount > nextBlock-1) {
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                    for (let i = addBlock; i <= Math.ceil(addBlock + (pageBlock - 1)); i++) {
+
+                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                    }
+
+                                    document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                }else if(pageCount <=  nextBlock-1){
+
+                                    for (let i = addBlock; i <= pageCount; i++) {
+
+                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+
+                                    }
+
+                                    document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                                 }
-
-                                document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
                             }
                         }
                     }
