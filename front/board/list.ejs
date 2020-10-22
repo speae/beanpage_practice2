@@ -125,9 +125,11 @@
             console.log(currentPage);
             console.log(pageBlock);
             console.log(addBlock);
-            console.log(prevBlock);
             console.log(nextBlock);
             console.log(Math.ceil(addBlock + (pageBlock -1)));
+            console.log(currentPage-(pageBlock-startPage));
+            console.log(prevBlock);
+            console.log(prevBlock/(currentPage/pageBlock));
 
             if (countResult <= pageSize) { //전체 게시글이 10개 <= 10
 
@@ -204,11 +206,10 @@
                         }else if (currentPage !== pageBlock) { //현재 페이지가 10이 아닌 20, 30일 때
 
                             if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+                                //const prevBlock = addBlock - 1 = ((Math.floor(currentPage / pageBlock)) * 10);
+                                document.write(`<a href="list?page=` + Math.ceil(prevBlock/(currentPage/pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록 페이지로
 
-                                //const prevBlock = addBlock - 1;
-                                document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록 페이지로
-
-                                for (let i = addBlock; i <= pageCount; i++) {
+                                for (let i = currentPage-(pageBlock-startPage); i <= pageCount; i++) {
 
                                     document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
 
@@ -218,9 +219,9 @@
 
                             }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
 
-                                 document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+                                 document.write(`<a href="list?page=` + Math.ceil(prevBlock/(currentPage/pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
 
-                                 for (let i = addBlock; i <= pageCount; i++) {
+                                 for (let i =  currentPage-(pageBlock-startPage); i <= prevBlock; i++) {
 
                                     document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
 
