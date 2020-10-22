@@ -53,8 +53,8 @@
     </div>
 </HEAD>
 <BODY>
-
-<form method="post" action="/board/write">
+<div class="writeWrap">
+<form method="post" action="/board/write" class="write">
     <table>
 
         <tr>
@@ -72,8 +72,32 @@
     </table>
 </form>
 <button onclick="location.href='/board/list'">돌아가기</button>
+</div>
 </BODY>
 <footer>
+<script>
 
+    $(function (){
+
+        const $frm = $(".write");
+
+        $frm.on("submit", function (e) {
+
+            e.preventDefault();
+            const writeData = $frm.serialize();
+
+            $.ajax({
+
+                url: $frm.attr("action"),
+                type: "post",
+                data: writeData,
+
+                success: function (res) {
+                    alert("success");
+                }
+            })
+        })
+    })
+</script>
 </footer>
 </html>

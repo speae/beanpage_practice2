@@ -113,7 +113,8 @@ module.exports = async function (type, request, response) {
                             throw "게시글 작성 실패.";
                         }
                     }
-                    response.redirect('/board/list');
+                    response.json('/board/list');
+                    //response.redirect('/board/list');
                 } else if (query_list[1].trim() === 'update') {
 
                     const num = request.body.num;
