@@ -212,13 +212,34 @@ class DAO_MYSQL{
 
 
     /**
-     * SQL 실행 (결과 레코드가 여러개일경우)
-     * @param {String} query
-     * @param {string[]} params
-     * @param {boolean} error_slack_alarm 에러발생시 슬랙알람 여부
-     * @return {Promise<boolean|Array>}
+     *
+     * @param {String}query
+     * @param {Number[] | String[]}params
+     * @param error_slack_alarm
+     * @returns {Promise<boolean|*>}
      */
-    async query(query, params, error_slack_alarm=true){
+    async queryComplex(query, params, error_slack_alarm=true){
+        let conn=false;
+        try {
+            conn = await this.connect();
+            if (conn===false) return false;
+            /* Step 3. */
+            const [rows] = await conn.query(query, params);
+            return rows;
+        } catch(err) {
+            return false;
+        }
+    }
+
+
+    /**
+     *
+     * @param {String}query
+     * @param {Number[]}params
+     * @param error_slack_alarm
+     * @returns {Promise<boolean|*>}
+     */
+    async queryInteger(query, params, error_slack_alarm=true){
         let conn=false;
         try {
             conn = await this.connect();
@@ -232,13 +253,13 @@ class DAO_MYSQL{
     }
 
     /**
-     *
-     * @param query
-     * @param {Number[]}params
-     * @param error_slack_alarm
-     * @returns {Promise<boolean|*>}
+     * SQL 실행 (결과 레코드가 여러개일경우)
+     * @param {String} query
+     * @param {string[]} params
+     * @param {boolean} error_slack_alarm 에러발생시 슬랙알람 여부
+     * @return {Promise<boolean|Array>}
      */
-    async queryInteger(query, params, error_slack_alarm=true){
+    async query(query, params, error_slack_alarm=true){
         let conn=false;
         try {
             conn = await this.connect();

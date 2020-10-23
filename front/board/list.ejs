@@ -83,7 +83,26 @@
     }
     %>
 </table>
-<button onclick="location.href='/board/write'">글쓰기</button>
+<button onclick="location.href='/board/write'">글쓰기</button> &nbsp;&nbsp;&nbsp;&nbsp;
+<script>
+    $(function (){
+        $("#search_btn").off("click").on("click", function (){
+            const searchList = $("#searchList").val();
+            const searchString = $("#searchString").val();
+
+            location.href = "/board/list?searchList="+searchList+"&searchString="+searchString;
+
+        })
+    })
+</script>
+<form method="get" action="/board/list">
+<select name="searchList" id="searchList">
+    <option value="subject">제목</option>
+    <option value="write_content">내용</option>
+    <option value="writer">닉네임</option>
+</select>
+<input type="text" name="searchString" id="searchString" value=""><button id="search_btn">검색</button>
+</form>
 </BODY>
 <footer>
     <div id="block">
@@ -103,6 +122,7 @@
 <!--        const count = "SELECT COUNT(*) FROM board_table"-->
 <!--        const boardCount = await db.queryOne(count, []); = 27-->
     <script class="page">
+
         const currentPage = parseInt(`<%=currentPage%>`);
         const countResult = parseInt(`<%=countResult%>`); //전체 게시글
         const pageSize = parseInt(`<%=pageSize%>`); //10
@@ -117,207 +137,406 @@
         const prevBlock = startBlock - 1;
         const nextBlock = Math.ceil(startBlock + pageBlock);
 
-        if(countResult > 0) { //게시글이 하나라도 존재할 때
+        const searchList = $("#searchList").val();
+        const searchString = $("#searchString").val();
 
-            console.log(countResult);
-            console.log(pageLimit);
-            console.log(pageCount);
-            console.log(currentPage);
-            console.log(pageBlock);
-            console.log(startBlock);
-            console.log(nextBlock);
-            console.log(prevBlock);
+            if(countResult > 0) { //게시글이 하나라도 존재할 때
 
-            if (countResult <= pageSize) { //전체 게시글이 10개 <= 10
+                console.log(searchList);
+                console.log(searchString);
+                console.log(countResult);
+                console.log(pageLimit);
+                console.log(pageCount);
+                console.log(currentPage);
+                console.log(pageBlock);
+                console.log(startBlock);
+                console.log(nextBlock);
+                console.log(prevBlock);
 
-                document.write(`<a href="#">[이전]</a>`);
+                if (searchList || searchString === null) {
 
-                for (let i = startPage; i <= startPage; i++) {
+                    if (countResult <= pageSize) { //전체 게시글이 10개 <= 10
 
-                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`); //첫 페이지만 활성
+                        document.write(`<a href="#">[이전]</a>`);
 
-                }
+                        for (let i = startPage; i <= startPage; i++) {
 
-                document.write(`<a href="#">[다음]</a>`);
-
-            } else if (countResult > pageSize) { //전체 게시글이 10개를 초과할 때
-
-                if (currentPage === startPage) { //현재 페이지가 1이면
-
-                    document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`);
-
-                    if (pageCount <= pageLimit) { //페이지 수가 페이지 한계인 10 이하일 때
-
-                        for (let i = startPage; i <= pageCount; i++) {
-
-                            document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                            document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
 
                         }
 
-                        document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
+                        document.write(`<a href="#">[다음]</a>`);
 
-                    } else if (pageCount > pageLimit) { //페이지 수가 페이지 한계인 10을 초과할 때; 총 게시글 수가 100개가 넘을 때 ex) 11...>10
+                        } else if (countResult > pageSize) { //전체 게시글이 10개를 초과할 때
 
-                        for (let i = startPage; i <= firstBlock; i++) {
+                            if (currentPage === startPage) { //현재 페이지가 1이면
 
-                            document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                document.write(`<a href="list?page=` + startPage + `"` + `>[이전]</a>`);
 
-                        }
+                                if (pageCount <= pageLimit) { //페이지 수가 페이지 한계인 10 이하일 때
 
-                        document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                    for (let i = startPage; i <= pageCount; i++) {
 
-                    }
+                                        document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
 
-                } else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
+                                    }
 
-                    if (currentPage % pageBlock === 0) { //현재 페이지가 10의 배수일 때; 10, 20, 30, ...
+                                    document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
 
-                        if (currentPage === pageBlock) { //현재 페이지가 10일 때
+                                } else if (pageCount > pageLimit) { //페이지 수가 페이지 한계인 10을 초과할 때; 총 게시글 수가 100개가 넘을 때 ex) 11...>10
 
-                            if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+                                    for (let i = startPage; i <= firstBlock; i++) {
 
-                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+                                        document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
 
-                                //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
-                                for (let i = startBlock; i <= pageCount; i++) {
+                                    }
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                    document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                                 }
 
-                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                            } else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
 
-                            }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+                                if (currentPage % pageBlock === 0) { //현재 페이지가 10의 배수일 때; 10, 20, 30, ...
 
-                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+                                    if (currentPage === pageBlock) { //현재 페이지가 10일 때
+
+                                        if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+
+                                            //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                            for (let i = startBlock; i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+
+                                            for (let i = startPage; i <= firstBlock; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        }
+                                    } else if (currentPage !== pageBlock) { //현재 페이지가 10이 아닌 20, 30일 때
+
+                                        if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+                                            //const prevBlock = startBlock - 1 = ((Math.floor(currentPage / pageBlock)) * 10);
+                                            document.write(`<a href="list?page=` + Math.ceil(prevBlock / (currentPage / pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록 페이지로
+
+                                            for (let i = currentPage - (pageBlock - startPage); i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //최대 카운트 수까지만 이동 가능
+
+                                        } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(prevBlock / (currentPage / pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+
+                                            for (let i = currentPage - (pageBlock - startPage); i <= prevBlock; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        }
+                                    }
+
+                                } else if (currentPage % pageBlock !== 0) { //현재 페이지가 10의 배수가 아닐 때
+
+                                    if (currentPage < pageBlock) {// 2, 3, 4, ...
+
+                                        if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
+
+                                            //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                            for (let i = startBlock; i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+
+                                            if (pageCount > firstBlock) {
+
+                                                for (let i = startBlock; i <= firstBlock; i++) {
+
+                                                    document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                                }
+
+                                                document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                            } else if (pageCount <= firstBlock) {
+
+                                                for (let i = startBlock; i <= pageCount; i++) {
+
+                                                    document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                                }
+
+                                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                            }
+                                        }
+                                    } else if (currentPage > pageBlock) { // 11, 12, 13, ...
+
+                                        if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //1페이지로
+
+                                            //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                            for (let i = startBlock; i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                            document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+
+                                            if (pageCount > nextBlock - 1) { //페이지 수가 블록을 넘길 때
+
+                                                for (let i = startBlock; i <= Math.ceil(startBlock + (pageBlock - 1)); i++) {
+
+                                                    document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                                }
+
+                                                document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                            } else if (pageCount <= nextBlock - 1) { //페이지 수가 블록 이하일 때
+
+                                                for (let i = startBlock; i <= pageCount; i++) {
+
+                                                    document.write(`<a href="list?page=` + i + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                                }
+
+                                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                }else{
+
+                    if (countResult <= pageSize) { //전체 게시글이 10개 <= 10
+
+                        document.write(`<a href="#">[이전]</a>`);
+
+                        for (let i = startPage; i <= startPage; i++) {
+
+                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
+
+                        }
+
+                        document.write(`<a href="#">[다음]</a>`);
+
+                    } else if (countResult > pageSize) { //전체 게시글이 10개를 초과할 때
+
+                        if (currentPage === startPage) { //현재 페이지가 1이면
+
+                            document.write(`<a href="list?page=` + startPage + `&searchList=` + searchList + `&searchString=` + searchString+ `">[이전]</a>`);
+
+                            if (pageCount <= pageLimit) { //페이지 수가 페이지 한계인 10 이하일 때
+
+                                for (let i = startPage; i <= pageCount; i++) {
+
+                                    document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                }
+
+                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //블록 맨 끝으로 이동
+
+                            } else if (pageCount > pageLimit) { //페이지 수가 페이지 한계인 10을 초과할 때; 총 게시글 수가 100개가 넘을 때 ex) 11...>10
 
                                 for (let i = startPage; i <= firstBlock; i++) {
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                    document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
 
                                 }
 
-                                document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `&searchList=` + searchList + `&searchString=` + searchString +`">[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                             }
-                        }else if (currentPage !== pageBlock) { //현재 페이지가 10이 아닌 20, 30일 때
 
-                            if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
-                                //const prevBlock = startBlock - 1 = ((Math.floor(currentPage / pageBlock)) * 10);
-                                document.write(`<a href="list?page=` + Math.ceil(prevBlock/(currentPage/pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록 페이지로
+                        } else if (currentPage !== startPage) { //현재 첫 페이지가 아닌 상태
 
-                                for (let i = currentPage-(pageBlock-startPage); i <= pageCount; i++) {
+                            if (currentPage % pageBlock === 0) { //현재 페이지가 10의 배수일 때; 10, 20, 30, ...
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                if (currentPage === pageBlock) { //현재 페이지가 10일 때
 
-                                }
+                                    if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
 
-                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //최대 카운트 수까지만 이동 가능
+                                        document.write(`<a href="list?page=` + Math.ceil(startPage) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //1페이지로
 
-                            }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+                                        //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                        for (let i = startBlock; i <= pageCount; i++) {
 
-                                 document.write(`<a href="list?page=` + Math.ceil(prevBlock/(currentPage/pageBlock)) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString + `">[` + i + `]</a>`); //첫 페이지만 활성
 
-                                 for (let i =  currentPage-(pageBlock-startPage); i <= prevBlock; i++) {
+                                        }
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                        document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
 
-                                }
+                                    } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
 
-                                document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                        document.write(`<a href="list?page=` + Math.ceil(startPage) + `&searchList=` + searchList + `&searchString=` + searchString+`"` + `>[이전]</a>`); //1페이지로
 
-                            }
-                        }
+                                        for (let i = startPage; i <= firstBlock; i++) {
 
-                    }else if (currentPage % pageBlock !== 0) { //현재 페이지가 10의 배수가 아닐 때
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
 
-                        if(currentPage < pageBlock){// 2, 3, 4, ...
+                                        }
 
-                            if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
-
-                                document.write(`<a href="list?page=` + Math.ceil(startPage) + `"` + `>[이전]</a>`); //1페이지로
-
-                                //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
-                                for (let i = startBlock; i <= pageCount; i++) {
-
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
-
-                                }
-
-                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
-
-                            }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
-
-                                document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
-
-                                if(pageCount > firstBlock) {
-
-                                    for (let i = startBlock; i <= firstBlock; i++) {
-
-                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                        document.write(`<a href="list?page=` + Math.ceil(startPage + firstBlock) + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                                     }
+                                } else if (currentPage !== pageBlock) { //현재 페이지가 10이 아닌 20, 30일 때
 
-                                    document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                    if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+                                        //const prevBlock = startBlock - 1 = ((Math.floor(currentPage / pageBlock)) * 10);
+                                        document.write(`<a href="list?page=` + Math.ceil(prevBlock / (currentPage / pageBlock)) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //이전 블록의 마지막 블록 페이지로
 
-                                }else if(pageCount <=  firstBlock){
+                                        for (let i = currentPage - (pageBlock - startPage); i <= pageCount; i++) {
 
-                                    for (let i = startBlock; i <= pageCount; i++) {
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
 
-                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                        }
+
+                                        document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //최대 카운트 수까지만 이동 가능
+
+                                    } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                        document.write(`<a href="list?page=` + Math.ceil(prevBlock / (currentPage / pageBlock)) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //이전 블록의 마지막 블록으로
+
+                                        for (let i = currentPage - (pageBlock - startPage); i <= prevBlock; i++) {
+
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                        }
+
+                                        document.write(`<a href="list?page=` + nextBlock + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
 
                                     }
-
-                                    document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
-
                                 }
-                            }
-                        }else if(currentPage > pageBlock) { // 11, 12, 13, ...
 
-                            if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
+                            } else if (currentPage % pageBlock !== 0) { //현재 페이지가 10의 배수가 아닐 때
 
-                                document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //1페이지로
+                                if (currentPage < pageBlock) {// 2, 3, 4, ...
 
-                                //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
-                                for (let i = startBlock; i <= pageCount; i++) {
+                                    if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
 
-                                    document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                        document.write(`<a href="list?page=` + Math.ceil(startPage) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //1페이지로
 
-                                }
+                                        //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                        for (let i = startBlock; i <= pageCount; i++) {
 
-                                document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
 
-                            }else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+                                        }
 
-                                document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `"` + `>[이전]</a>`); //이전 블록의 마지막 블록으로
+                                        document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
 
-                                if(pageCount > nextBlock-1) { //페이지 수가 블록을 넘길 때
+                                    } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
 
-                                    for (let i = startBlock; i <= Math.ceil(startBlock + (pageBlock - 1)); i++) {
+                                        document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //이전 블록의 마지막 블록으로
 
-                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                        if (pageCount > firstBlock) {
 
+                                            for (let i = startBlock; i <= firstBlock; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + nextBlock + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        } else if (pageCount <= firstBlock) {
+
+                                            for (let i = startBlock; i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString + `">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString +`">[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        }
                                     }
+                                } else if (currentPage > pageBlock) { // 11, 12, 13, ...
 
-                                    document.write(`<a href="list?page=` + nextBlock + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
+                                    if (countResult <= pageLimit) { //이 상태에서 페이지 블록의 한계는 최소 100이 된다. 그 최소값보다 게시글이 적을 때
 
-                                }else if(pageCount <=  nextBlock-1){ //페이지 수가 블록 이하일 때
+                                        document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //1페이지로
 
-                                    for (let i = startBlock; i <= pageCount; i++) {
+                                        //const startBlock = ((Math.floor(currentPage / pageBlock)) * 10) + 1; 1/10-->0*10-->0+1 = 1, 11/10--> 1*10-->10+1 = 11, ...
+                                        for (let i = startBlock; i <= pageCount; i++) {
 
-                                        document.write(`<a href="list?page=` + i + `"` + `>[` + i + `]</a>`);
+                                            document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
 
+                                        }
+
+                                        document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                    } else if (countResult > pageLimit) { //게시글 수가 블록의 한계를 넘을 때
+
+                                        document.write(`<a href="list?page=` + Math.ceil(prevBlock) + `&searchList=` + searchList + `&searchString=` + searchString + `">[이전]</a>`); //이전 블록의 마지막 블록으로
+
+                                        if (pageCount > nextBlock - 1) { //페이지 수가 블록을 넘길 때
+
+                                            for (let i = startBlock; i <= Math.ceil(startBlock + (pageBlock - 1)); i++) {
+
+                                                document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + nextBlock + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        } else if (pageCount <= nextBlock - 1) { //페이지 수가 블록 이하일 때
+
+                                            for (let i = startBlock; i <= pageCount; i++) {
+
+                                                document.write(`<a href="list?page=` + i + `&searchList=` + searchList + `&searchString=` + searchString+`">[` + i + `]</a>`); //첫 페이지만 활성
+
+                                            }
+
+                                            document.write(`<a href="list?page=` + pageCount + `&searchList=` + searchList + `&searchString=` + searchString + `">[다음]</a>`); //다음 블록의 첫페이지로 이동
+
+                                        }
                                     }
-
-                                    document.write(`<a href="list?page=` + pageCount + `"` + `>[다음]</a>`); //다음 블록의 첫페이지로 이동
-
                                 }
                             }
                         }
                     }
                 }
             }
-        }
 
     </script>
     </div>
