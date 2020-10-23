@@ -121,13 +121,13 @@
             <button onclick="showReply(<%=reply_num%>)">[댓글수정]</button>
             <button onclick="location.href='/board/replyDelete?num=<%=rows.num%>&reply_num=<%=reply_data.reply_num%>'">삭제</button><br>
             <div id="<%=reply_num%>" style="display: none ">
-                        <form action="/board/replyUpdate" method="post" class="replyUpdate">
-                            글쓴이: <input size="70" type="text" name="reply_writer" value="<%=reply_data.reply_writer%>" /><br>
-                            내용: <input size="70" type="text" name="reply_content" value="<%=reply_data.reply_content%>" />
-                            <input type="hidden" name="num" value="<%=rows.num%>" />
-                            <input type="hidden" name="reply_num" value="<%=reply_data.reply_num%>" /><br>
-                            <input type="submit" value="[댓글수정완료]" />
-                        </form>
+
+                            글쓴이: <input size="70" type="text" id="reply_writer_update" name="reply_writer" value="<%=reply_data.reply_writer%>" /><br>
+                            내용: <input size="70" type="text" id="reply_content_update"  name="reply_content" value="<%=reply_data.reply_content%>" />
+                            <input type="hidden" id="num_update" name="num" value="<%=rows.num%>" />
+                            <input type="hidden" id="reply_num_update" name="reply_num" value="<%=reply_data.reply_num%>" /><br>
+                            <button id="replyUpdate">[댓글수정완료]</button>
+
                     </div>
             </td>
     </tr>
@@ -135,42 +135,40 @@
  }
  %>
 </table>
-<form action="/board/replyWrite" method="post" class="replyWrite">
-    <table border="1" width=800">
+<table border="1" width=800">
     <tr>
-        <td>글쓴이</td><td colspan="3"><input size="70" type="text" name="reply_writer" /></td>
+        <td>글쓴이</td><td colspan="3"><input size="70" type="text" id="reply_writer_add" name="reply_writer" /></td>
     </tr>
     <tr>
         <td>내용</td>
-        <td colspan="3"><input size="70" type="text" name="reply_content" /></td>
+        <td colspan="3"><input size="70" type="text" id="reply_content_add" name="reply_content" /></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
-            <input type="hidden" name="num" value="<%=rows.num%>" />
-            <input type="submit" value="등록" />
+            <input type="hidden" name="num" id="num_add" value="<%=rows.num%>" />
+            <button id="replyWrite">댓글등록</button>
         </td>
     </tr>
 </table>
-</form>
 <button onclick="location.href='/board/list'">돌아가기</button>
 
 <script>
 
     $(function (){
 
-        const $replyUpdate = $(".replyUpdate");
-
-        $replyUpdate.on("submit", function (d) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
-
-            d.preventDefault();
-            const replyUpdateData = $replyUpdate.serialize();
+        $("#replyUpdate").off("click").on("click", function (d) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
 
             $.ajax({
 
-                url: $replyUpdate.attr("action"),
+                url: "/board/replyUpdate",
                 type: "post",
                 dataType: "json",
-                data: replyUpdateData,
+                data: {
+                    reply_writer: $("#reply_writer_update").val(),
+                    reply_content: $("#reply_content_update").val(),
+                    num: $("#num_update").val(),
+                    reply_num: $("#reply_num_update").val()
+                },
                 async : true,
 
                 success: function () {
@@ -180,19 +178,18 @@
             })
         })
 
-        const $replyWrite = $(".replyWrite");
-
-        $replyWrite.on("submit", function (e) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
-
-            e.preventDefault();
-            const replyData = $replyWrite.serialize();
+        $("#replyWrite").off("click").on("click", function (e) { //이벤트 바인딩; 함수의 이벤트를 연결. 버튼을 누르면 아래 함수 내 코드 실행
 
             $.ajax({
 
-                url: $replyWrite.attr("action"),
+                url: "/board/replyWrite",
                 type: "post",
                 dataType: "json",
-                data: replyData,
+                data: {
+                    reply_writer: $("#reply_writer_add").val(),
+                    reply_content: $("#reply_content_add").val(),
+                    num: $("#num_add").val()
+                },
                 async : true,
 
                 success: function () {
