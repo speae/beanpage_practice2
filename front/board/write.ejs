@@ -56,15 +56,16 @@
 <div class="writeWrap">
     <table>
         <tr>
-            <td>제목</td><td><input type="text" name="subject" id="subject"></td>
+            <td>제목</td><td><input type="text" name="subject" id="subject" /></td>
         </tr>
         <tr>
-            <td>글쓴이</td> <td><input type="text" name="writer" id="writer"></td>
+            <td>글쓴이</td> <td><input type="text" name="writer" id="writer" /></td>
         </tr>
         <tr>
             <td>내용</td><td><textarea cols="23" rows="15" name="write_content" id="write_content"></textarea></td>
         </tr>
         <tr>
+            <td><input type="hidden" id="num" value="<%=number%>" /></td>
             <td><button id="add_btn">입력</button></td>
         </tr>
     </table>
@@ -75,6 +76,8 @@
 <script>
 
     $(function (){
+
+        const num = parseInt(`<%=number%>`)+1;
 
         $("#add_btn").off("click").on("click", function () {
 
@@ -92,12 +95,12 @@
 
                 success: function (res) {
                     alert("본문 작성 성공");
-                    location.href="/board/list";
+                    location.href="/board/read?num="+num;
                 },
 
                 error: function (xhr){
                     alert("본문 작성 실패");
-                    location.href="/board/list";
+                    location.href="/board/write";
                 }
             })
         })
